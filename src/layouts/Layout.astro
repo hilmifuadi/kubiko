@@ -1,0 +1,247 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Toast from '../components/Toast.astro';
+import { siteConfig } from '../data/services';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = `${siteConfig.siteName} — ${siteConfig.tagline}`, 
+  description = siteConfig.description 
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kubiko.my.id" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/favicon.svg" />
+
+    <!-- Theme Color matching Warm Light Background -->
+    <meta name="theme-color" content="#FAF9F6" />
+
+    <!-- Preconnect Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+
+  <body class="min-w-[320px] bg-warm-bg text-warm-charcoal antialiased selection:bg-warm-accent selection:text-warm-bg">
+    
+    <Navbar />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+    <Toast />
+
+    <!-- Client-side Interactive Logic (Vanilla JS for zero runtime overhead) -->
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        initCategoryFilter();
+        initClickToCopy();
+        initUptimeKumaStatus();
+      });
+
+      // 1. Instant Category Filter
+      function initCategoryFilter() {
+        const filterButtons = document.querySelectorAll('.filter-tab');
+        const cards = document.querySelectorAll('.service-card');
+
+        filterButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const category = btn.getAttribute('data-filter');
+
+            // Update Tab styles
+            filterButtons.forEach(b => {
+              b.classList.remove('bg-warm-accent', 'text-warm-bg', 'shadow-subtle');
+              b.classList.add('bg-warm-sand', 'text-warm-charcoal', 'border', 'border-warm-border');
+              
+              const countEl = b.querySelector('span:last-child');
+              if (countEl) {
+                countEl.className = 'text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-warm-surface text-warm-muted border border-warm-border/60';
+              }
+            });
+
+            btn.classList.add('bg-warm-accent', 'text-warm-bg', 'shadow-subtle');
+            btn.classList.remove('bg-warm-sand', 'text-warm-charcoal', 'border-warm-border');
+            
+            const activeCountEl = btn.querySelector('span:last-child');
+            if (activeCountEl) {
+              activeCountEl.className = 'text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-warm-bg/20 text-warm-bg';
+            }
+
+            // Filter Cards
+            cards.forEach(card => {
+              const cardCat = card.getAttribute('data-category');
+              if (category === 'all' || cardCat === category) {
+                card.style.display = 'flex';
+                // Trigger smooth entrance
+                card.classList.remove('opacity-0', 'scale-95');
+                card.classList.add('opacity-100', 'scale-100');
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          });
+        });
+      }
+
+      // 2. Click to Copy with Visual & Toast Feedback
+      function initClickToCopy() {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        copyButtons.forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const textToCopy = btn.getAttribute('data-copy-text');
+            const serviceName = btn.getAttribute('data-service-name') || 'Server';
+            if (!textToCopy) return;
+
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(textToCopy);
+              } else {
+                // Fallback for non-https / older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+              }
+
+              // Update Button State
+              const labelEl = btn.querySelector('.copy-label');
+              const origText = labelEl ? labelEl.textContent : '';
+              if (labelEl) labelEl.textContent = 'Tersalin!';
+              btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+
+              if (window.showToast) {
+                window.showToast(`IP ${serviceName} (${textToCopy}) berhasil disalin!`);
+              }
+
+              setTimeout(() => {
+                if (labelEl) labelEl.textContent = origText;
+                btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy text: ', err);
+            }
+          });
+        });
+      }
+
+      // 3. Dynamic Uptime Kuma Status Monitor with Fallback
+      async function initUptimeKumaStatus() {
+        const primaryApi = '/api/status-page/heartbeat/family';
+        const fallbackUrl = '/mock-status.json';
+
+        let data = null;
+        try {
+          const res = await fetch(primaryApi, { cache: 'no-store' });
+          if (res.ok) {
+            data = await res.json();
+          } else {
+            throw new Error('Primary Uptime Kuma endpoint unreachable, using fallback');
+          }
+        } catch (e) {
+          // Fallback to local mock data
+          try {
+            const fallbackRes = await fetch(fallbackUrl);
+            if (fallbackRes.ok) {
+              data = await fallbackRes.json();
+            }
+          } catch (fallbackErr) {
+            console.warn('Could not load status fallback:', fallbackErr);
+          }
+        }
+
+        if (!data || !data.heartbeatList) return;
+
+        let allNormal = true;
+        let offlineCount = 0;
+
+        // Loop through each service card
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+          const monitorId = card.getAttribute('data-monitor-id');
+          if (!monitorId) return;
+
+          const heartbeatArr = data.heartbeatList[monitorId];
+          if (!heartbeatArr || heartbeatArr.length === 0) return;
+
+          // Most recent heartbeat is the last item or first depending on Kuma response
+          const latestHeartbeat = heartbeatArr[heartbeatArr.length - 1];
+          const isUp = latestHeartbeat.status === 1;
+
+          const dotEl = card.querySelector('.status-dot');
+          const ringEl = card.querySelector('.status-pulse-ring');
+          const labelEl = card.querySelector('.status-label');
+
+          if (!isUp) {
+            allNormal = false;
+            offlineCount++;
+            if (dotEl) {
+              dotEl.classList.remove('bg-status-online');
+              dotEl.classList.add('bg-status-offline');
+            }
+            if (ringEl) {
+              ringEl.classList.remove('bg-status-online');
+              ringEl.classList.add('bg-status-offline');
+            }
+            if (labelEl) {
+              labelEl.textContent = 'Offline';
+              labelEl.classList.add('text-status-offline');
+            }
+          } else {
+            if (labelEl) {
+              labelEl.textContent = 'Online';
+            }
+          }
+        });
+
+        // Update Navbar Global Badge
+        const globalBadge = document.getElementById('global-status-badge');
+        if (globalBadge) {
+          const textEl = globalBadge.querySelector('.status-text');
+          const dotEl = globalBadge.querySelector('.status-dot');
+          const pingEl = globalBadge.querySelector('.status-ping');
+
+          if (!allNormal && offlineCount > 0) {
+            if (textEl) textEl.textContent = `${offlineCount} Layanan Terkendala`;
+            if (dotEl) {
+              dotEl.classList.remove('bg-status-online');
+              dotEl.classList.add('bg-status-offline');
+            }
+            if (pingEl) {
+              pingEl.classList.remove('bg-status-online');
+              pingEl.classList.add('bg-status-offline');
+            }
+          } else {
+            if (textEl) textEl.textContent = 'Semua Layanan Normal';
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
