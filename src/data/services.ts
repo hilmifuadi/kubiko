@@ -77,11 +77,11 @@ export const servicesData: ServiceItem[] = [
 ];
 
 export const caddyProxyChain: CaddyRoute[] = [
-  { from: 'nonton.kubiko.my.id', target: 'Nonton Film (Jellyfin)', port: 'Streaming', note: 'Bebas Iklan' },
-  { from: 'files.kubiko.my.id', target: 'Penyimpanan Foto & Dokumen (Nextcloud)', port: 'Cloud', note: 'Aman' },
-  { from: 'pdf.kubiko.my.id', target: 'Alat Pengolah PDF (Stirling)', port: 'Dokumen', note: 'Praktis' },
-  { from: 'crafty.kubiko.my.id', target: 'Server Game Minecraft', port: 'Game', note: 'Survival' },
-  { from: 'game.kubiko.my.id', target: 'Zona Game Santai', port: 'Arcade', note: 'Di Browser' },
+  { from: 'nonton.kubiko.my.id', target: 'Nonton Film (Jellyfin)', port: ':8096', note: 'Bebas Iklan' },
+  { from: 'files.kubiko.my.id', target: 'Penyimpanan Foto & Dokumen (Nextcloud)', port: ':8443', note: 'Aman' },
+  { from: 'pdf.kubiko.my.id', target: 'Alat Pengolah PDF (Stirling)', port: ':8889', note: 'Praktis' },
+  { from: 'crafty.kubiko.my.id', target: 'Server Game Minecraft', port: ':8443', note: 'Survival' },
+  { from: 'game.kubiko.my.id', target: 'Zona Game Santai', port: ':3002', note: 'Di Browser' },
 ];
 
 export const siteConfig = {
