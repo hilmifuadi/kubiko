@@ -21,58 +21,25 @@ kubiko.my.id, www.kubiko.my.id {
     }
 }
 
-# 2. Jellyfin Media Server (Streaming Film Keluarga)
+# 2. Jellyfin Media Server (Streaming Film)
 nonton.kubiko.my.id {
     encode gzip zstd
-    reverse_proxy 100.96.87.92:8096 {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-    }
+    reverse_proxy 100.96.87.92:8096
 }
 
-# 3. Nextcloud (Penyimpanan Cloud Pribadi & Backup Foto)
+# 3. Nextcloud (Penyimpanan Berkas)
 files.kubiko.my.id {
     encode gzip zstd
-    request_body {
-        max_size 10GB
-    }
-    reverse_proxy 100.96.87.92:8443 {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-    }
+    reverse_proxy 100.96.87.92:8443
 }
 
-# 4. Stirling PDF Tools (Manipulasi Berkas PDF)
+# 4. Stirling PDF Tools (Pengolah PDF)
 pdf.kubiko.my.id {
     encode gzip zstd
-    request_body {
-        max_size 250MB
-    }
     reverse_proxy 100.96.87.92:8889
 }
 
-# 5. Crafty Controller (Minecraft Dashboard & Game Server)
-crafty.kubiko.my.id {
-    encode gzip zstd
-    reverse_proxy 100.96.87.92:8443 {
-        # Crafty menggunakan HTTPS internal self-signed
-        transport http {
-            tls_insecure_skip_verify
-        }
-    }
-}
-
-# 6. Zona Game Keluarga (Game Web Subdomain)
-game.kubiko.my.id {
-    encode gzip zstd
-    reverse_proxy 100.96.87.92:3002
-}
-
-# 7. Uptime Kuma Status Page (24/7 SLA Monitor)
+# 5. Uptime Kuma Status Page (Status Monitor)
 status.kubiko.my.id {
     encode gzip zstd
     reverse_proxy 100.96.87.92:3001
