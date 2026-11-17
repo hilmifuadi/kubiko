@@ -1,0 +1,139 @@
+---
+import { caddyProxyChain } from '../data/services';
+import { Copy, ArrowUpRight, Check, ShieldCheck, HelpCircle } from 'lucide-astro';
+
+const accessSteps = [
+  {
+    step: '01',
+    title: 'Pilih Layanan dari Beranda',
+    detail: 'Semua layanan keluarga terhubung aman lewat HTTPS. Klik kartu layanan yang ingin dipakai tanpa perlu mengingat nomor port lokal.'
+  },
+  {
+    step: '02',
+    title: 'Masuk dengan Akun Pribadi',
+    detail: 'Portal ini tidak menyimpan password. Setiap anggota keluarga cukup login di halaman masing-masing (Jellyfin nonton atau Nextcloud files).'
+  },
+  {
+    step: '03',
+    title: 'Cek Status Jika Ada Kendala',
+    detail: 'Jika video atau dokumen tidak terbuka, periksa indikator status di pojok kartu atau buka status.kubiko.my.id untuk melihat kondisi server rumah.'
+  }
+];
+---
+
+<section id="panduan" class="py-14 sm:py-20 border-t border-warm-border scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      
+      <!-- Kolom Kiri: 3 Langkah Panduan Keluarga -->
+      <div class="lg:col-span-5 space-y-6">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-warm-muted mb-2">
+            <span class="w-2 h-2 rounded-sm bg-warm-accent"></span>
+            <span>Panduan Singkat</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-warm-charcoal tracking-tight">
+            Cara Akses Layanan Keluarga
+          </h2>
+          <p class="text-sm text-warm-muted mt-2 leading-relaxed">
+            Panduan mudah untuk anggota keluarga dan tamu saat mengakses portal kubiko.my.id.
+          </p>
+        </div>
+
+        <div class="divide-y divide-warm-border border-y border-warm-border">
+          {accessSteps.map((item) => (
+            <div class="py-4 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold text-warm-accent pt-1 shrink-0">
+                {item.step}.
+              </span>
+              <div>
+                <h3 class="text-sm font-bold text-warm-charcoal">{item.title}</h3>
+                <p class="mt-1 text-xs text-warm-muted leading-relaxed">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="p-4 rounded-xl bg-warm-sand/80 border border-warm-border text-xs text-warm-muted flex items-center gap-3">
+          <ShieldCheck class="w-5 h-5 text-warm-accent shrink-0" />
+          <span>Koneksi aman dengan SSL otomatis Let's Encrypt & tunnel privat Tailscale WireGuard.</span>
+        </div>
+      </div>
+
+      <!-- Kolom Kanan: Tabel Alamat Subdomain & Target Caddy -->
+      <div id="subdomain-routes" class="lg:col-span-7 bg-warm-surface rounded-2xl border border-warm-border shadow-card overflow-hidden">
+        
+        <div class="px-6 py-4 bg-warm-sand/60 border-b border-warm-border flex items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-sm text-warm-charcoal font-sans">
+              Daftar Alamat Subdomain
+            </h3>
+            <p class="text-[11px] font-mono text-warm-muted">Rute Reverse Proxy Caddy ke Home Server</p>
+          </div>
+          <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-warm-sand border border-warm-border text-warm-muted">
+            Tailnet IP: 100.96.87.92
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-warm-border bg-warm-sand/30 text-[11px] font-mono text-warm-muted">
+                <th class="py-3 px-5 font-semibold">Alamat Domain</th>
+                <th class="py-3 px-4 font-semibold">Layanan</th>
+                <th class="py-3 px-4 font-semibold text-right">Target Port</th>
+                <th class="py-3 px-5 font-semibold text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-warm-border/60 text-xs">
+              {caddyProxyChain.map((route) => {
+                const fullUrl = `https://${route.from}`;
+                return (
+                  <tr class="hover:bg-warm-sand/40 transition-colors">
+                    <td class="py-3.5 px-5 font-mono font-medium text-warm-charcoal whitespace-nowrap">
+                      {route.from}
+                    </td>
+                    <td class="py-3.5 px-4 text-warm-muted whitespace-nowrap">
+                      {route.target}
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-mono text-warm-muted whitespace-nowrap">
+                      <span class="px-2 py-0.5 rounded bg-warm-sand border border-warm-border text-[10px]">
+                        {route.port}
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-5 text-right whitespace-nowrap">
+                      <div class="inline-flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          class="copy-btn p-1.5 rounded-lg border border-warm-border hover:bg-warm-sand text-warm-charcoal transition-colors cursor-pointer"
+                          data-copy-text={route.from}
+                          data-service-name={route.target}
+                          title={`Salin ${route.from}`}
+                        >
+                          <Copy class="w-3.5 h-3.5" />
+                        </button>
+                        <a
+                          href={fullUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="p-1.5 rounded-lg border border-warm-border hover:bg-warm-accent hover:text-warm-bg text-warm-charcoal transition-colors"
+                          title={`Buka ${fullUrl}`}
+                        >
+                          <ArrowUpRight class="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

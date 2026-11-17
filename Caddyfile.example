@@ -1,54 +1,79 @@
 # ==============================================================================
-# Caddyfile Example untuk Edge Reverse Proxy kubiko.my.id
+# Caddyfile untuk Edge Reverse Proxy kubiko.my.id
 # Letakkan konfigurasi ini di VPS Edge (/etc/caddy/Caddyfile)
-# Ganti 100.x.y.z dengan IP Tailscale dari Home Server Anda
+# IP Tailscale Home Server: 100.96.87.92
 # ==============================================================================
 
-# 1. Main Portal (Static Astro SSG Build)
+# 1. Main Portal (Static Astro SSG Build) + Heartbeat Proxy
 kubiko.my.id, www.kubiko.my.id {
-    root * /var/www/kubiko/dist
-    file_server
-    try_files {path} /index.html
-
-    # Proxy endpoint Uptime Kuma agar tidak terkena CORS
-    handle /api/status-page/heartbeat/* {
-        reverse_proxy 100.x.y.z:3001
-    }
-
-    # Cache static assets
-    @static {
-        file
-        path *.css *.js *.svg *.png *.jpg *.woff2
-    }
-    header @static Cache-Control "public, max-age=31536000, immutable"
-
     encode gzip zstd
+
+    # Meneruskan API status Uptime Kuma agar tidak terkena CORS
+    handle /api/status-page/* {
+        reverse_proxy 100.96.87.92:3001
+    }
+
+    # Sajikan file statis Astro murni
+    handle {
+        root * /var/www/kubiko/dist
+        try_files {path} /index.html
+        file_server
+    }
 }
 
-# 2. Jellyfin Media Server
-jellyfin.kubiko.my.id {
-    reverse_proxy 100.x.y.z:8096 {
-        # WebSocket support
+# 2. Jellyfin Media Server (Streaming Film Keluarga)
+nonton.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:8096 {
         header_up Host {host}
         header_up X-Real-IP {remote_host}
         header_up X-Forwarded-For {remote_host}
         header_up X-Forwarded-Proto {scheme}
     }
-    encode gzip zstd
 }
 
-# 3. Stirling PDF Tools
-pdf.kubiko.my.id {
-    # Ukuran upload besar untuk file PDF
+# 3. Nextcloud (Penyimpanan Cloud Pribadi & Backup Foto)
+files.kubiko.my.id {
+    encode gzip zstd
     request_body {
-        max_size 200MB
+        max_size 10GB
     }
-    reverse_proxy 100.x.y.z:8080
-    encode gzip zstd
+    reverse_proxy 100.96.87.92:8081 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
 }
 
-# 4. Uptime Kuma Status Page
-status.kubiko.my.id {
-    reverse_proxy 100.x.y.z:3001
+# 4. Stirling PDF Tools (Manipulasi Berkas PDF)
+pdf.kubiko.my.id {
     encode gzip zstd
+    request_body {
+        max_size 250MB
+    }
+    reverse_proxy 100.96.87.92:8080
+}
+
+# 5. Crafty Controller (Minecraft Dashboard & Game Server)
+crafty.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:8443 {
+        # Crafty menggunakan HTTPS internal self-signed
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}
+
+# 6. Zona Game Keluarga (Game Web Subdomain)
+game.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:3002
+}
+
+# 7. Uptime Kuma Status Page (24/7 SLA Monitor)
+status.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:3001
 }

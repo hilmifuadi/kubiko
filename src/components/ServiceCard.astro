@@ -1,5 +1,5 @@
 ---
-import { Film, FileText, Gamepad2, Dices, HardDrive, Activity, Copy, Check, ArrowUpRight } from 'lucide-astro';
+import { Film, FileText, Gamepad2, Dices, HardDrive, Activity, Copy, ArrowUpRight } from 'lucide-astro';
 import type { ServiceItem } from '../types/service';
 
 interface Props {
@@ -12,12 +12,14 @@ const { service } = Astro.props;
 <div 
   class="service-card group relative flex flex-col justify-between p-6 rounded-2xl bg-warm-surface border border-warm-border hover:border-warm-border-hover hover:shadow-card-hover transition-all duration-200"
   data-category={service.category}
+  data-service-id={service.id}
   data-monitor-id={service.uptimeKumaMonitorId}
+  data-keywords={service.uptimeKumaKeywords ? JSON.stringify(service.uptimeKumaKeywords) : '[]'}
 >
   <div>
     <!-- Top Row: Icon, Status Dot & Monospace Tag -->
     <div class="flex items-start justify-between gap-3 mb-4">
-      <div class="w-12 h-12 rounded-xl bg-warm-sand border border-warm-border/80 flex items-center justify-center text-warm-charcoal group-hover:text-warm-accent group-hover:bg-warm-sand/80 transition-colors">
+      <div class="w-12 h-12 rounded-xl bg-warm-sand border border-warm-border/80 flex items-center justify-center text-warm-charcoal group-hover:text-warm-accent group-hover:bg-warm-sand/80 transition-colors shrink-0">
         {service.icon === 'Film' && <Film class="w-6 h-6" />}
         {service.icon === 'FileText' && <FileText class="w-6 h-6" />}
         {service.icon === 'Gamepad2' && <Gamepad2 class="w-6 h-6" />}
@@ -27,7 +29,7 @@ const { service } = Astro.props;
         {!['Film', 'FileText', 'Gamepad2', 'Dices', 'HardDrive', 'Activity'].includes(service.icon) && <Activity class="w-6 h-6" />}
       </div>
 
-      <div class="flex flex-col items-end gap-1.5">
+      <div class="flex flex-col items-end gap-1">
         <!-- Real-time Status Indicator -->
         <div 
           class="service-status-pill inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-warm-sand border border-warm-border text-warm-charcoal"
@@ -37,12 +39,18 @@ const { service } = Astro.props;
             <span class="status-pulse-ring animate-ping absolute inline-flex h-full w-full rounded-full bg-status-online opacity-75"></span>
             <span class="status-dot relative inline-flex rounded-full h-2 w-2 bg-status-online"></span>
           </span>
-          <span class="status-label font-medium">Online</span>
+          <span class="status-label font-medium">{service.isUpcoming ? 'Disiapkan' : 'Online'}</span>
         </div>
 
-        <!-- Category Chip -->
-        <span class="text-[10px] font-mono uppercase tracking-wider text-warm-muted">
-          {service.category}
+        <!-- Dynamic Ping & Uptime readout (filled by JS) -->
+        <div class="service-metrics text-[10px] font-mono text-warm-muted hidden">
+          <span class="service-ping font-medium">-- ms</span>
+          <span class="service-uptime ml-1">· --%</span>
+        </div>
+
+        <!-- Subdomain Chip -->
+        <span class="text-[10px] font-mono text-warm-muted truncate max-w-[140px]">
+          {service.subdomain}
         </span>
       </div>
     </div>
@@ -64,6 +72,18 @@ const { service } = Astro.props;
     <p class="mt-3 text-sm text-warm-muted leading-relaxed">
       {service.description}
     </p>
+
+    <!-- Specs List (Monospace Dots ala modern clean layout) -->
+    {service.specs && service.specs.length > 0 && (
+      <div class="mt-4 pt-3 border-t border-warm-border/40 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-mono text-warm-muted">
+        {service.specs.map((spec, idx) => (
+          <span>
+            {idx > 0 && <span class="mr-2 text-warm-border">•</span>}
+            {spec}
+          </span>
+        ))}
+      </div>
+    )}
   </div>
 
   <!-- Bottom Actions -->
@@ -80,14 +100,14 @@ const { service } = Astro.props;
           <span class="copy-icon">
             <Copy class="w-3.5 h-3.5 text-warm-muted" />
           </span>
-          <span class="copy-label">Salin IP: {service.copyText.split(':')[0]}</span>
+          <span class="copy-label">Salin Host: {service.copyText}</span>
         </button>
 
         <a 
           href={service.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="p-2 rounded-xl bg-warm-charcoal text-warm-bg hover:bg-warm-accent transition-colors shadow-subtle"
+          class="p-2 rounded-xl bg-warm-charcoal text-warm-bg hover:bg-warm-accent transition-colors shadow-subtle shrink-0"
           title={`Buka ${service.name}`}
           aria-label={`Buka ${service.name}`}
         >
@@ -96,17 +116,17 @@ const { service } = Astro.props;
       </div>
     ) : (
       <div class="flex items-center justify-between w-full">
-        <span class="text-xs font-mono text-warm-muted">
-          {service.url.replace('https://', '')}
+        <span class="text-xs font-mono text-warm-muted truncate max-w-[180px]">
+          {service.subdomain}
         </span>
 
         <a 
           href={service.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-warm-charcoal text-warm-bg hover:bg-warm-accent transition-colors shadow-subtle group/btn"
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-warm-charcoal text-warm-bg hover:bg-warm-accent transition-colors shadow-subtle group/btn shrink-0"
         >
-          <span>Buka</span>
+          <span>{service.isUpcoming ? 'Kunjungi Subdomain' : 'Buka Layanan'}</span>
           <ArrowUpRight class="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
         </a>
       </div>

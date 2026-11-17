@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from '../data/services';
-import { ShieldCheck, Activity, ArrowUpRight, Menu, X } from 'lucide-astro';
+import { Activity, ArrowUpRight } from 'lucide-astro';
 ---
 
 <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-warm-bg/90 border-b border-warm-border transition-colors">
@@ -52,45 +52,42 @@ import { ShieldCheck, Activity, ArrowUpRight, Menu, X } from 'lucide-astro';
           Layanan
         </a>
         <a 
+          href="#panduan" 
+          class="px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+        >
+          Panduan
+        </a>
+        <a 
+          href="#subdomain-routes" 
+          class="px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+        >
+          Daftar Subdomain
+        </a>
+        <a 
           href="#topology" 
           class="px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
         >
           Topologi
-        </a>
-        <a 
-          href={siteConfig.statusPageUrl}
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors inline-flex items-center gap-1"
-        >
-          Status Kuma
-          <ArrowUpRight class="w-3.5 h-3.5 text-warm-muted" />
-        </a>
-        <a 
-          href="#about" 
-          class="px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
-        >
-          Tentang
         </a>
       </nav>
 
       <!-- Right Action / Mobile Toggle -->
       <div class="flex items-center gap-2">
         <a
-          href="https://status.kubiko.my.id"
+          href={siteConfig.statusPageUrl}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-warm-sand text-warm-charcoal border border-warm-border hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle"
         >
           <Activity class="w-4 h-4 text-warm-accent" />
-          <span class="hidden sm:inline">Uptime Kuma</span>
+          <span class="hidden sm:inline">Uptime Kuma SLA</span>
         </a>
 
         <!-- Mobile Menu Button -->
         <button 
           id="mobile-menu-btn"
           type="button" 
-          class="md:hidden p-2 rounded-lg text-warm-charcoal hover:bg-warm-sand focus:outline-none"
+          class="md:hidden p-2 rounded-lg text-warm-charcoal hover:bg-warm-sand focus:outline-none cursor-pointer"
           aria-label="Toggle menu"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,9 +119,9 @@ import { ShieldCheck, Activity, ArrowUpRight, Menu, X } from 'lucide-astro';
       </a>
     </div>
     <a href="#services" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Layanan Keluarga</a>
+    <a href="#panduan" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Panduan Akses</a>
+    <a href="#subdomain-routes" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Daftar Subdomain</a>
     <a href="#topology" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Topologi Jaringan</a>
-    <a href={siteConfig.statusPageUrl} target="_blank" rel="noopener noreferrer" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Status Page Uptime Kuma</a>
-    <a href="#about" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Tentang Portal</a>
   </div>
 </header>
 
@@ -136,7 +133,6 @@ import { ShieldCheck, Activity, ArrowUpRight, Menu, X } from 'lucide-astro';
     mobileMenu?.classList.toggle('hidden');
   });
 
-  // Close mobile menu when link clicked
   mobileMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       mobileMenu.classList.add('hidden');

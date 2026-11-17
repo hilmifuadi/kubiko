@@ -58,7 +58,7 @@ const {
       document.addEventListener('DOMContentLoaded', () => {
         initCategoryFilter();
         initClickToCopy();
-        initUptimeKumaStatus();
+        initSmartUptimeKuma();
       });
 
       // 1. Instant Category Filter
@@ -94,7 +94,6 @@ const {
               const cardCat = card.getAttribute('data-category');
               if (category === 'all' || cardCat === category) {
                 card.style.display = 'flex';
-                // Trigger smooth entrance
                 card.classList.remove('opacity-0', 'scale-95');
                 card.classList.add('opacity-100', 'scale-100');
               } else {
@@ -119,7 +118,6 @@ const {
               if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(textToCopy);
               } else {
-                // Fallback for non-https / older browsers
                 const textarea = document.createElement('textarea');
                 textarea.value = textToCopy;
                 textarea.style.position = 'fixed';
@@ -137,7 +135,7 @@ const {
               btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
 
               if (window.showToast) {
-                window.showToast(`IP ${serviceName} (${textToCopy}) berhasil disalin!`);
+                window.showToast(`Alamat ${serviceName} (${textToCopy}) berhasil disalin!`);
               }
 
               setTimeout(() => {
@@ -151,96 +149,221 @@ const {
         });
       }
 
-      // 3. Dynamic Uptime Kuma Status Monitor with Fallback
-      async function initUptimeKumaStatus() {
-        const primaryApi = '/api/status-page/heartbeat/family';
-        const fallbackUrl = '/mock-status.json';
+      // 3. Smart Uptime Kuma Status Monitor (with Keyword Auto-Matching & SLA metrics)
+      async function initSmartUptimeKuma() {
+        const refreshBtn = document.getElementById('refresh-status-btn');
+        const refreshIcon = refreshBtn ? refreshBtn.querySelector('.refresh-icon') : null;
 
-        let data = null;
-        try {
-          const res = await fetch(primaryApi, { cache: 'no-store' });
-          if (res.ok) {
-            data = await res.json();
-          } else {
-            throw new Error('Primary Uptime Kuma endpoint unreachable, using fallback');
-          }
-        } catch (e) {
-          // Fallback to local mock data
-          try {
-            const fallbackRes = await fetch(fallbackUrl);
-            if (fallbackRes.ok) {
-              data = await fallbackRes.json();
+        async function fetchStatus() {
+          if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+          const candidateSlugs = ['family', 'kubiko', 'default'];
+          let hbData = null;
+          let pageData = null;
+
+          // Attempt each candidate slug
+          for (const slug of candidateSlugs) {
+            try {
+              const [hbRes, pageRes] = await Promise.all([
+                fetch(`/api/status-page/heartbeat/${slug}`, { cache: 'no-store' }),
+                fetch(`/api/status-page/${slug}`, { cache: 'no-store' }).catch(() => null)
+              ]);
+
+              if (hbRes.ok) {
+                const json = await hbRes.json();
+                if (json && json.heartbeatList && Object.keys(json.heartbeatList).length > 0) {
+                  hbData = json;
+                  if (pageRes && pageRes.ok) {
+                    pageData = await pageRes.json().catch(() => null);
+                  }
+                  break;
+                }
+              }
+            } catch (e) {
+              // Try next slug
             }
-          } catch (fallbackErr) {
-            console.warn('Could not load status fallback:', fallbackErr);
+          }
+
+          // Fallback to local mock data if external API unreachable
+          if (!hbData) {
+            try {
+              const fallbackRes = await fetch('/mock-status.json');
+              if (fallbackRes.ok) {
+                hbData = await fallbackRes.json();
+              }
+            } catch (fallbackErr) {
+              console.warn('Fallback status unavailable:', fallbackErr);
+            }
+          }
+
+          if (refreshIcon) {
+            setTimeout(() => refreshIcon.classList.remove('animate-spin'), 600);
+          }
+
+          if (!hbData || !hbData.heartbeatList) return;
+
+          // Extract remote monitors list for smart name/keyword matching
+          const remoteMonitors = [];
+          if (pageData && pageData.publicGroupList) {
+            for (const group of pageData.publicGroupList) {
+              if (group.monitorList) {
+                for (const m of group.monitorList) {
+                  remoteMonitors.push(m);
+                }
+              }
+            }
+          }
+
+          const hbList = hbData.heartbeatList;
+          const upList = hbData.uptimeList || {};
+
+          let totalMonitored = 0;
+          let onlineCount = 0;
+          let offlineCount = 0;
+          let pingTotal = 0;
+          let pingCount = 0;
+          let uptimeTotal = 0;
+          let uptimeCount = 0;
+
+          const serviceCards = document.querySelectorAll('.service-card');
+
+          serviceCards.forEach(card => {
+            const rawMonitorId = card.getAttribute('data-monitor-id');
+            const keywordsRaw = card.getAttribute('data-keywords') || '[]';
+            let keywords = [];
+            try { keywords = JSON.parse(keywordsRaw); } catch(e) {}
+
+            let resolvedId = null;
+
+            // 1. Try smart matching by keyword
+            if (remoteMonitors.length > 0 && keywords.length > 0) {
+              const matched = remoteMonitors.find(rm => {
+                const nameLower = (rm.name || '').toLowerCase();
+                return keywords.some(kw => nameLower.includes(kw.toLowerCase()));
+              });
+              if (matched) resolvedId = String(matched.id);
+            }
+
+            // 2. Fallback to assigned numeric monitor ID
+            if (!resolvedId && rawMonitorId && hbList[rawMonitorId]) {
+              resolvedId = String(rawMonitorId);
+            }
+
+            const entries = resolvedId ? hbList[resolvedId] : null;
+            if (!entries || entries.length === 0) return;
+
+            totalMonitored++;
+            const latest = entries[entries.length - 1];
+            const isUp = latest.status === 1;
+
+            if (isUp) {
+              onlineCount++;
+            } else if (latest.status === 0) {
+              offlineCount++;
+            }
+
+            // Update Card Status Indicator
+            const dotEl = card.querySelector('.status-dot');
+            const ringEl = card.querySelector('.status-pulse-ring');
+            const labelEl = card.querySelector('.status-label');
+            const metricsEl = card.querySelector('.service-metrics');
+            const pingEl = card.querySelector('.service-ping');
+            const uptimeEl = card.querySelector('.service-uptime');
+
+            if (dotEl && ringEl && labelEl) {
+              if (isUp) {
+                dotEl.className = 'status-dot relative inline-flex rounded-full h-2 w-2 bg-status-online';
+                ringEl.className = 'status-pulse-ring animate-ping absolute inline-flex h-full w-full rounded-full bg-status-online opacity-75';
+                labelEl.textContent = 'Online';
+                labelEl.classList.remove('text-status-offline');
+              } else {
+                dotEl.className = 'status-dot relative inline-flex rounded-full h-2 w-2 bg-status-offline';
+                ringEl.className = 'status-pulse-ring animate-ping absolute inline-flex h-full w-full rounded-full bg-status-offline opacity-75';
+                labelEl.textContent = 'Offline';
+                labelEl.classList.add('text-status-offline');
+              }
+            }
+
+            // Display Ping and Uptime if available
+            if (latest.ping !== null && latest.ping !== undefined) {
+              const pingNum = Math.round(latest.ping);
+              pingTotal += pingNum;
+              pingCount++;
+              if (pingEl) pingEl.textContent = `${pingNum} ms`;
+            }
+
+            const rawUptime = resolvedId ? upList[`${resolvedId}_24`] : null;
+            if (typeof rawUptime === 'number') {
+              const upPercent = (rawUptime * 100).toFixed(1);
+              uptimeTotal += parseFloat(upPercent);
+              uptimeCount++;
+              if (uptimeEl) uptimeEl.textContent = `· ${upPercent}%`;
+            }
+
+            if (metricsEl && (pingEl || uptimeEl)) {
+              metricsEl.classList.remove('hidden');
+            }
+          });
+
+          // Update Global Badge on Navbar
+          const globalBadge = document.getElementById('global-status-badge');
+          if (globalBadge) {
+            const textEl = globalBadge.querySelector('.status-text');
+            const dotEl = globalBadge.querySelector('.status-dot');
+            const pingEl = globalBadge.querySelector('.status-ping');
+
+            if (offlineCount > 0) {
+              if (textEl) textEl.textContent = `${offlineCount} Layanan Terkendala`;
+              if (dotEl) dotEl.className = 'status-dot relative inline-flex rounded-full h-2 w-2 bg-status-offline';
+              if (pingEl) pingEl.className = 'status-ping animate-ping absolute inline-flex h-full w-full rounded-full bg-status-offline opacity-75';
+            } else {
+              if (textEl) textEl.textContent = 'Semua Layanan Normal';
+              if (dotEl) dotEl.className = 'status-dot relative inline-flex rounded-full h-2 w-2 bg-status-online';
+              if (pingEl) pingEl.className = 'status-ping animate-ping absolute inline-flex h-full w-full rounded-full bg-status-online opacity-75';
+            }
+          }
+
+          // Update Hero Telemetry Card
+          const heroPing = document.getElementById('hero-ping-val');
+          if (heroPing && pingCount > 0) {
+            heroPing.textContent = `~${Math.round(pingTotal / pingCount)} ms`;
+          }
+
+          const heroSla = document.getElementById('hero-sla-val');
+          if (heroSla && uptimeCount > 0) {
+            heroSla.textContent = `${(uptimeTotal / uptimeCount).toFixed(1)}%`;
+          }
+
+          const heroActive = document.getElementById('hero-active-val');
+          if (heroActive && totalMonitored > 0) {
+            heroActive.textContent = `${onlineCount}/${totalMonitored} Aktif`;
+          }
+
+          const heroHomeStatus = document.getElementById('hero-home-status');
+          if (heroHomeStatus) {
+            heroHomeStatus.textContent = offlineCount > 0 ? 'Sebagian Offline' : 'Connected';
+          }
+
+          const heroLastChecked = document.getElementById('hero-last-checked');
+          if (heroLastChecked) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            heroLastChecked.textContent = `Terakhir dicek pukul ${timeStr} WIB · Tiap 60s`;
           }
         }
 
-        if (!data || !data.heartbeatList) return;
+        // Run initial fetch
+        fetchStatus();
 
-        let allNormal = true;
-        let offlineCount = 0;
-
-        // Loop through each service card
-        const serviceCards = document.querySelectorAll('.service-card');
-        serviceCards.forEach(card => {
-          const monitorId = card.getAttribute('data-monitor-id');
-          if (!monitorId) return;
-
-          const heartbeatArr = data.heartbeatList[monitorId];
-          if (!heartbeatArr || heartbeatArr.length === 0) return;
-
-          // Most recent heartbeat is the last item or first depending on Kuma response
-          const latestHeartbeat = heartbeatArr[heartbeatArr.length - 1];
-          const isUp = latestHeartbeat.status === 1;
-
-          const dotEl = card.querySelector('.status-dot');
-          const ringEl = card.querySelector('.status-pulse-ring');
-          const labelEl = card.querySelector('.status-label');
-
-          if (!isUp) {
-            allNormal = false;
-            offlineCount++;
-            if (dotEl) {
-              dotEl.classList.remove('bg-status-online');
-              dotEl.classList.add('bg-status-offline');
-            }
-            if (ringEl) {
-              ringEl.classList.remove('bg-status-online');
-              ringEl.classList.add('bg-status-offline');
-            }
-            if (labelEl) {
-              labelEl.textContent = 'Offline';
-              labelEl.classList.add('text-status-offline');
-            }
-          } else {
-            if (labelEl) {
-              labelEl.textContent = 'Online';
-            }
-          }
-        });
-
-        // Update Navbar Global Badge
-        const globalBadge = document.getElementById('global-status-badge');
-        if (globalBadge) {
-          const textEl = globalBadge.querySelector('.status-text');
-          const dotEl = globalBadge.querySelector('.status-dot');
-          const pingEl = globalBadge.querySelector('.status-ping');
-
-          if (!allNormal && offlineCount > 0) {
-            if (textEl) textEl.textContent = `${offlineCount} Layanan Terkendala`;
-            if (dotEl) {
-              dotEl.classList.remove('bg-status-online');
-              dotEl.classList.add('bg-status-offline');
-            }
-            if (pingEl) {
-              pingEl.classList.remove('bg-status-online');
-              pingEl.classList.add('bg-status-offline');
-            }
-          } else {
-            if (textEl) textEl.textContent = 'Semua Layanan Normal';
-          }
+        // Refresh on button click
+        if (refreshBtn) {
+          refreshBtn.addEventListener('click', () => {
+            fetchStatus();
+          });
         }
+
+        // Auto poll every 60 seconds
+        setInterval(fetchStatus, 60000);
       }
     </script>
   </body>
