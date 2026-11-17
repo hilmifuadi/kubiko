@@ -1,94 +1,178 @@
-**Project Specification: Family Services Portal & Personal Dashboard**  
-Dokumen ini berisi spesifikasi teknis, desain UI/UX, serta arsitektur jaringan untuk membangun portal web statis sebagai dashboard layanan keluarga (Jellyfin, Stirling PDF, Game Server, dll.) dan portofolio pribadi.  
-  
----  
-**1. Gambaran Umum & Tujuan Proyek**  
-- **Jenis Proyek:** Static Web Portal & Service Directory (bukan toko/penyedia layanan komersial).  
-- **Target Pengguna:** Anggota keluarga (akses cepat layanan rumah) dan pengunjung publik (informasi status/portofolio).  
-- **Karakteristik Utama:** Super ringan (zero backend runtime di VPS), tampilan bersih terinspirasi dari layout modern *Bento Grid* \& *technical aesthetic* ala Cloudzy, namun menggunakan palet warna terang yang kalem (*warm light theme*).  
-  
----  
-**2. Arsitektur Infrastruktur & Jaringan**  
-Sistem menggunakan pola **Edge Reverse Proxy over Mesh VPN** untuk menembus CGNAT *home server* dengan penggunaan resource VPS yang minimal.  
-- **Edge Server (VPS Publik):**  
-  - Spesifikasi: 1 vCPU, 1 GB RAM.  
-  - Peran: Menyajikan file statis web portal dan bertindak sebagai *Reverse Proxy* publik dengan SSL otomatis.  
-  - Web Server: **Caddy** (direkomendasikan karena ringan dan otomatis mengelola sertifikat HTTPS Let's Encrypt).  
-- **Tunneling: Tailscale (Tailnet)** menghubungkan VPS publik dengan *Home Server* secara aman tanpa *port forwarding* di router rumah.  
-- **Home Server (Di Belakang CGNAT):**  
-  - Menjalankan aplikasi inti: **Jellyfin**, **Stirling PDF**, **Game Server**, dan **Uptime Kuma** (sebagai pemantau status layanan).  
-```  
-[Browser Pengguna]  
-        │ (HTTPS)  
-        ▼  
- [VPS Publik: 1 vCPU / 1 GB RAM] ── Caddy Web Server  
-        ├── domain.com ──────────► Static Build Astro (/var/www/portal)  
-        ├── jellyfin.domain.com ─► Reverse Proxy via Tailscale IP ──► [Home Server:8096]  
-        ├── pdf.domain.com ──────► Reverse Proxy via Tailscale IP ──► [Home Server:8080]  
-        └── status.domain.com ───► Reverse Proxy via Tailscale IP ──► [Home Server:3001 (Uptime Kuma)]  
-   
-```  
-  
----  
-**3. Tech Stack Frontend**  
-- **Framework: Astro** (Static Site Generation / SSG). Output akhir berupa file HTML, CSS, dan sedikit Vanilla JS murni sehingga tidak membebani RAM VPS.  
-- **Styling: Tailwind CSS** (v3 atau v4).  
-- **Icons: Lucide Icons** (`lucide-astro` atau inline SVG) untuk ikon layanan yang minimalis dan tajam.  
-- **Data Management:** Menggunakan file konfigurasi lokal terpusat (misalnya `src/data/services.ts` atau `services.json`) agar penambahan/pengeditan layanan cukup mengubah data tanpa menyentuh struktur komponen.  
-- **Monitoring Integration:** Fetch client-side ringan ke API Status Page **Uptime Kuma** yang di-host di *home server* (di-proxy lewat Caddy agar tidak terkena blokir CORS/CGNAT).  
-  
----  
-**4. Panduan Desain & Estetika (Warm Light Technical Theme)**  
-Mengadaptasi struktur tata letak Cloudzy (rapi, terstruktur, *bento grid*, dan memiliki kartu informasi ala *terminal/status card*), tetapi diubah menjadi **tema terang yang kalem dan ramah mata**:  
-**Palet Warna**  
-- **Background Utama:** Warm Cream / Off-White (`#FAF9F6` atau `#F7F5F0`).  
-- **Surface / Card Background:** Pure White (`#FFFFFF`) atau Soft Sand (`#F2EFE9`) untuk kontras lembut.  
-- **Border & Garis Pemisah:** Warm Stone / Light Taupe (`#E6E2D8`) dengan efek hover border sedikit lebih gelap (`#D1CCC0`) atau aksen lembut.  
-- **Teks Utama:** Deep Charcoal (`#1C1B18`) — lebih lembut dari hitam pekat.  
-- **Teks Sekunder:** Muted Slate / Warm Gray (`#6E6A61`).  
-- **Warna Aksen:**  
-  - Primary Accent: Sage Green (`#3D6B58`) atau Terracotta/Amber kalem (`#C86D51`) untuk tombol utama dan highlight.  
-  - Status Online: Emerald Green (`#10B981`) dengan animasi denyut (*pulse*) halus.  
-  - Status Offline: Rose Red (`#EF4444`).  
-**Tipografi**  
-- **Heading & Body:** `Plus Jakarta Sans` atau `Inter` (bersih, modern, mudah dibaca).  
-- **Monospace (Badge, IP, Status Teknis):** `JetBrains Mono` atau `Fira Code` (memberikan sentuhan teknis khas halaman produk infrastruktur).  
-**Fitur yang Dihilangkan (Out of Scope)**  
-- **Tidak perlu** fitur *Command Palette* (`⌘K` search modal).  
-- **Tidak perlu** sistem login/autentikasi di halaman portal (autentikasi ditangani masing-masing layanan seperti Jellyfin).  
-- **Tidak perlu** sistem keranjang belanja, harga, atau backend database di VPS.  
-  
----  
-**5. Struktur Halaman & Komponen Utama**  
-1. **Header / Navigation Bar (Minimalis):**  
-  - **Kiri:** Logo/Nama Portal (misal: `RUMAH.NET` atau nama keluarga) + *Badge* status global (`● Semua Layanan Normal` yang terhubung ke Uptime Kuma).  
-  - **Kanan:** Navigasi sederhana (misal: `Layanan`, `Mini Games`, `Tentang / Portofolio`).  
-2. **Hero Section (2 Kolom Asimetris):**  
-  - **Kolom Kiri:** Judul ramah & jelas (misal: *"Pusat Hiburan & Utilitas Keluarga"*), subjudul singkat penjelasan portal, dan tombol akses cepat (*Quick Action*) ke 2 layanan paling sering dibuka (Jellyfin & Stirling PDF).  
-  - **Kolom Kanan (Info / Status Card ala Cloudzy):** Kartu bergaya *system window* terang (`#F2EFE9` dengan 3 titik dekoratif di pojok kiri atas) yang menampilkan informasi ringkas jaringan:  
-    - `Edge Node`: VPS Singapore (Online)  
-    - `Tunnel`: Tailscale Mesh Active  
-    - `Home Node`: Connected  
-3. **Service Bento Grid (Inti Halaman):**  
-  - Filter kategori sederhana berbasis tombol/tab (`Semua`, `Media`, `Utilitas`, `Game`).  
-  - Kartu layanan disusun dalam grid responsif (1 kolom di HP, 2-3 kolom di desktop).  
-  - **Isi setiap kartu layanan:**  
-    - Ikon layanan + Indikator titik status *real-time* (Hijau/Merah dari Uptime Kuma).  
-    - Nama Layanan (contoh: **Jellyfin**, **Stirling PDF**, **Minecraft Server**, **Web Mini Games**).  
-    - Deskripsi singkat 1-2 baris yang mudah dipahami anggota keluarga.  
-    - Tag spesifikasi/info kecil dengan font *monospace* (contoh: `4K HDR • Streaming`, `PDF Tools • No Upload Limit`, atau tombol `Copy IP` khusus untuk game server).  
-    - Tautan/Tombol membuka layanan di tab baru.  
-4. **Footer Minimalis:**  
-  - Informasi hak cipta pribadi, tautan ke portofolio/GitHub pribadi, dan tautan langsung ke halaman penuh **Uptime Kuma Status Page**.  
-  
----  
-**6. Instruksi Build & Deployment untuk AI Agent**  
-Saat membangun proyek ini, ikuti aturan berikut:  
-1. Inisialisasi proyek **Astro** dengan **Tailwind CSS** dan **TypeScript**.  
-2. Pisahkan daftar layanan ke dalam file data terstruktur (`src/data/services.ts`) dengan skema: `id`, `name`, `description`, `url`, `category`, `icon`, `tag`, `uptimeKumaMonitorId`, dan opsi `copyText` (opsional untuk IP game).  
-3. Buat komponen UI modular (`Navbar.astro`, `HeroStatusCard.astro`, `ServiceCard.astro`, `Footer.astro`).  
-4. Implementasikan skrip *client-side* ringan (Vanilla JS) di dalam Astro untuk:  
-  - Filter kategori layanan secara instan tanpa reload.  
-  - Fitur *Click-to-Copy* (untuk IP server game) dengan notifikasi *toast* kecil.  
-  - Fetch status monitor dari endpoint publik Uptime Kuma (`/api/status-page/heartbeat/<slug>`) untuk memperbarui titik indikator status tiap kartu secara dinamis (dengan *fallback* elegan jika API tidak terjangkau saat mode *development* lokal).  
-5. Pastikan hasil akhir dapat di-build menjadi file statis murni menggunakan perintah `npm run build` (menghasilkan folder `dist/`).  
+**Project Specification & Progress Log: Family Services Portal & Personal Dashboard (kubiko.my.id)**  
+Dokumen ini berisi spesifikasi teknis, arsitektur jaringan, catatan pemecahan masalah (*troubleshooting*), serta rangkuman implementasi proyek portal web statis untuk keluarga di domain **`kubiko.my.id`**.
+
+---
+
+## 1. Gambaran Umum & Tujuan Proyek
+- **Domain:** `kubiko.my.id`
+- **Repositori GitHub:** [https://github.com/muhaliakbar14-cyber/kubiko](https://github.com/muhaliakbar14-cyber/kubiko) (Branch: `main`)
+- **Jenis Proyek:** Static Web Portal & Service Directory (portal mandiri keluarga).
+- **Target Pengguna:** Seluruh anggota keluarga (akses mudah tanpa perlu tahu nomor port) dan publik.
+- **Karakteristik Utama:** Super ringan (zero backend runtime di VPS, konsumsi RAM < 15MB), tampilan ramah keluarga, bersih, dan cepat.
+
+---
+
+## 2. Arsitektur Infrastruktur & Jaringan
+
+Sistem menggunakan pola **Edge Reverse Proxy over Mesh VPN** untuk menembus CGNAT *Home Server* secara aman tanpa *port forwarding* di router rumah.
+
+```text
+[Browser Pengunjung / Keluarga]
+        │ (HTTPS Let's Encrypt)
+        ▼
+ [VPS Publik: 160.19.166.23] ── Web Server: Caddy v2
+        ├── kubiko.my.id ──────────► Static Build Astro (/var/www/kubiko/dist)
+        ├── nonton.kubiko.my.id ───► Reverse Proxy via Tailscale ──► [Home Server:8096 (Jellyfin)]
+        ├── files.kubiko.my.id ────► Reverse Proxy via Tailscale ──► [Home Server:8443 (Nextcloud)]
+        ├── pdf.kubiko.my.id ──────► Reverse Proxy via Tailscale ──► [Home Server:8889 (Stirling PDF)]
+        └── status.kubiko.my.id ───► Reverse Proxy via Tailscale ──► [Home Server:3001 (Uptime Kuma)]
+```
+
+### Rincian Node Jaringan:
+1. **Edge Server (Cloud VPS):**
+   - **IP Publik:** `160.19.166.23`
+   - **Tailscale IP:** `100.107.50.76` (di bawah `tag:vps`)
+   - **Peran:** Menyajikan file statis portal web (`dist/`) dan *Reverse Proxy* SSL otomatis via Caddy v2.
+2. **Home Server (`dell`):**
+   - **Hostname:** `dell`
+   - **Tailscale IP:** `100.96.87.92` (di bawah user `muhaliakbar14-cyber@`)
+   - **Firewall (UFW):** `inactive`
+   - **Docker Compose:** Berada di `/home/bolay/jellyfin/docker-compose.yml`
+
+---
+
+## 3. Tech Stack Frontend
+- **Framework:** **Astro v5 (SSG)** — Output akhir berupa HTML, CSS, dan sedikit Vanilla JS murni.
+- **Styling:** **Tailwind CSS**.
+- **Icons:** **Lucide Icons** (`lucide-astro`).
+- **Data Management:** Terpusat di `src/data/services.ts` (menambah/mengubah layanan cukup di file ini).
+- **Uptime Kuma Integration:** Script client-side cerdas dengan *keyword auto-matching* dan graceful fallback ke `public/mock-status.json`.
+
+---
+
+## 4. Panduan Desain & Estetika (Warm Light Theme)
+- **Background Utama:** Warm Cream / Off-White (`#FAF9F6`).
+- **Surface / Card Background:** Pure White (`#FFFFFF`) & Soft Sand (`#F2EFE9`).
+- **Border & Garis Pemisah:** Warm Stone (`#E6E2D8`), hover border (`#D1CCC0`).
+- **Teks Utama:** Deep Charcoal (`#1C1B18`).
+- **Teks Sekunder:** Muted Slate / Warm Gray (`#6E6A61`).
+- **Aksen:** Sage Green (`#3D6B58`), Status Hijau (`#10B981`), Status Merah (`#EF4444`).
+- **Tipografi:** `Plus Jakarta Sans` (Heading & Body) dan `JetBrains Mono` (Info teknis/monospace).
+
+---
+
+## 5. Daftar Layanan & Port Mapping Riil (Home Server)
+
+| Layanan | Subdomain Publik | Target Port di Home Server | Status Terkini |
+| :--- | :--- | :--- | :--- |
+| **Portal Utama** | `kubiko.my.id` | `/var/www/kubiko/dist` (Lokal VPS) | Siap deploy dari folder `dist/` |
+| **Jellyfin Media** | `nonton.kubiko.my.id` | `100.96.87.92:8096` | ✅ **AKTIF & NORMAL (302 OK)** |
+| **Stirling PDF** | `pdf.kubiko.my.id` | `100.96.87.92:8889` | ✅ **AKTIF & NORMAL (200 OK)** |
+| **Uptime Kuma** | `status.kubiko.my.id` | `100.96.87.92:3001` | ✅ **AKTIF & NORMAL (302 OK)** |
+| **Nextcloud** | `files.kubiko.my.id` | `100.96.87.92:8443` | ⚠️ Menunggu penyesuaian versi |
+| **Minecraft Server** | `crafty.kubiko.my.id` | `crafty.kubiko.my.id` (Alamat Host) | Tombol salin host tersedia di kartu |
+| **Zona Game** | `game.kubiko.my.id` | `100.96.87.92:3002` | Subdomain disiapkan (Upcoming) |
+
+---
+
+## 6. Konfigurasi Caddyfile di VPS (`/etc/caddy/Caddyfile`)
+
+```caddy
+# 1. Main Portal (Static Astro SSG) + Status API Proxy
+kubiko.my.id, www.kubiko.my.id {
+    encode gzip zstd
+
+    handle /api/status-page/* {
+        reverse_proxy 100.96.87.92:3001
+    }
+
+    handle {
+        root * /var/www/kubiko/dist
+        try_files {path} /index.html
+        file_server
+    }
+}
+
+# 2. Jellyfin Media Server
+nonton.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:8096
+}
+
+# 3. Nextcloud Storage
+files.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:8443
+}
+
+# 4. Stirling PDF Tools
+pdf.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:8889
+}
+
+# 5. Uptime Kuma Status Page
+status.kubiko.my.id {
+    encode gzip zstd
+    reverse_proxy 100.96.87.92:3001
+}
+```
+
+---
+
+## 7. Rangkuman Troubleshooting & Solusi yang Berhasil Diterapkan
+
+### A. Masalah Cloudflare DNS & SSL
+- **Gejala:** Subdomain tidak bisa dibuka (`DNS_PROBE_POSSIBLE`), wildcard mengarah ke IP Tailscale.
+- **Solusi:**
+  - Tambahkan A record untuk `@`, `nonton`, `status`, `pdf`, `files` ke IP publik VPS (`160.19.166.23`) dengan status *DNS only*.
+  - Tambahkan CNAME `www` mengarah ke `kubiko.my.id`.
+  - Hapus IP Tailscale dari DNS publik Cloudflare.
+
+### B. Masalah Error 502 di Semua Subdomain (Tailscale ACL)
+- **Gejala:** `tailscale ping` tembus 4ms, tetapi semua koneksi HTTP/TCP ke port 3001, 8096, dll. selalu timeout / 502.
+- **Penyebab:** VPS menggunakan `tag:vps`, dan Tailscale ACL default memblokir perangkat bertag untuk memulai koneksi ke perangkat user (`dell`).
+- **Solusi:** Perbarui Tailscale ACL di Admin Console (`login.tailscale.com/admin/acls`) dengan menambahkan port ke dalam `grants`:
+  ```json
+  {
+      "src": ["tag:vps"],
+      "dst": ["100.96.87.92"],
+      "ip": ["tcp:8096", "tcp:8443", "tcp:8889", "tcp:3001"]
+  }
+  ```
+  *Hasil:* Begitu di-save, `status.kubiko.my.id`, `nonton.kubiko.my.id`, dan `pdf.kubiko.my.id` langsung aktif seketika!
+
+### C. Masalah Port Stirling PDF
+- **Penyebab:** Stirling PDF di Home Server di-mapping ke port `8889` (bukan 8080 karena 8080 dipakai qbittorrent via gluetun).
+- **Solusi:** Caddyfile diubah mengarah ke `100.96.87.92:8889`. Hasilnya langsung 200 OK.
+
+### D. Masalah Nextcloud (Error 502 & Crash Loop)
+- **Penyebab dari Log:**
+  `Can't start Nextcloud because upgrading from 33.0.0.16 to 35.0.3.2 is not supported. It is only possible to upgrade one major version at a time.`
+  Image `nextcloud:latest` menarik versi 35, sedangkan data lama berada di versi 33.
+- **Solusi:**
+  - Opsi Cepat: Pin image ke `image: nextcloud:33` di `docker-compose.yml`, lalu `docker compose up -d nextcloud`.
+  - Opsi Bertahap: Naikkan perlahan: 33 ➔ 34 ➔ 35.
+  - Tambahkan environment HTTPS:
+    ```yaml
+    - OVERWRITEPROTOCOL=https
+    - OVERWRITECLIURL=https://files.kubiko.my.id
+    ```
+
+### E. Penyesuaian UI & Kebutuhan Pengguna
+- **Uptime Kuma Card:** Dihapus dari katalog layanan publik (hanya memantau di background & navbar).
+- **Penyederhanaan Teks:** Menghilangkan angka teknis latensi/SLA dan istilah rumit dari kartu layanan agar ramah untuk anggota keluarga.
+- **Penghapusan Tulisan "Singapore":** Diganti dengan "Cloud VPS".
+- **Pemisahan Penjelasan Teknis:** Penjelasan arsitektur hanya ditempatkan di section Arsitektur Jaringan.
+
+---
+
+## 8. Langkah Lanjutan untuk Sesi / Conversation Berikutnya
+
+1. **Deploy Build Statis ke VPS:**
+   Salin isi folder `dist/` dari proyek ini ke VPS di direktori `/var/www/kubiko/dist`.
+   *(Bisa menggunakan rsync, scp, atau git pull + build di VPS).*
+2. **Finishing Nextcloud:**
+   Jalankan `docker compose up -d nextcloud` setelah mengubah image ke `nextcloud:33` (atau setelah migrasi v34/v35 selesai), lalu pastikan `files.kubiko.my.id` dapat dibuka.
+3. **Penyelarasan Game Server (Crafty/Minecraft):**
+   Konfigurasikan subdomain game atau uji tombol salin host `crafty.kubiko.my.id`.
