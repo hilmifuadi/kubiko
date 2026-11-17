@@ -65,11 +65,11 @@ Sistem menggunakan pola **Edge Reverse Proxy over Mesh VPN** untuk menembus CGNA
 
 | Layanan | Subdomain Publik | Target Port di Home Server | Status Terkini |
 | :--- | :--- | :--- | :--- |
-| **Portal Utama** | `kubiko.my.id` | `/var/www/kubiko/dist` (Lokal VPS) | Siap deploy dari folder `dist/` |
+| **Portal Utama** | `kubiko.my.id` | `/var/www/kubiko/dist` (Lokal VPS) | Proses deploy di VPS via Git & Node 22 LTS |
 | **Jellyfin Media** | `nonton.kubiko.my.id` | `100.96.87.92:8096` | ✅ **AKTIF & NORMAL (302 OK)** |
 | **Stirling PDF** | `pdf.kubiko.my.id` | `100.96.87.92:8889` | ✅ **AKTIF & NORMAL (200 OK)** |
 | **Uptime Kuma** | `status.kubiko.my.id` | `100.96.87.92:3001` | ✅ **AKTIF & NORMAL (302 OK)** |
-| **Nextcloud** | `files.kubiko.my.id` | `100.96.87.92:8443` | ⚠️ Menunggu penyesuaian versi |
+| **Nextcloud** | `files.kubiko.my.id` | `100.96.87.92:8443` | ✅ **AKTIF & NORMAL (302 OK)** |
 | **Minecraft Server** | `crafty.kubiko.my.id` | `crafty.kubiko.my.id` (Alamat Host) | Tombol salin host tersedia di kartu |
 | **Zona Game** | `game.kubiko.my.id` | `100.96.87.92:3002` | Subdomain disiapkan (Upcoming) |
 
@@ -146,18 +146,18 @@ status.kubiko.my.id {
 - **Penyebab:** Stirling PDF di Home Server di-mapping ke port `8889` (bukan 8080 karena 8080 dipakai qbittorrent via gluetun).
 - **Solusi:** Caddyfile diubah mengarah ke `100.96.87.92:8889`. Hasilnya langsung 200 OK.
 
-### D. Masalah Nextcloud (Error 502 & Crash Loop)
+### D. Masalah Nextcloud (Error 502 & Crash Loop) — TERSELESAIKAN ✅
 - **Penyebab dari Log:**
   `Can't start Nextcloud because upgrading from 33.0.0.16 to 35.0.3.2 is not supported. It is only possible to upgrade one major version at a time.`
-  Image `nextcloud:latest` menarik versi 35, sedangkan data lama berada di versi 33.
-- **Solusi:**
-  - Opsi Cepat: Pin image ke `image: nextcloud:33` di `docker-compose.yml`, lalu `docker compose up -d nextcloud`.
-  - Opsi Bertahap: Naikkan perlahan: 33 ➔ 34 ➔ 35.
-  - Tambahkan environment HTTPS:
+  Image `nextcloud:latest` menarik versi 35, sedangkan basis data lama berada di versi 33.
+- **Solusi yang Diterapkan:**
+  - Menyesuaikan tag image di `docker-compose.yml` agar sesuai rantai upgrade atau mempertahankan versi yang kompatibel.
+  - Mengonfigurasi parameter environment reverse proxy:
     ```yaml
     - OVERWRITEPROTOCOL=https
     - OVERWRITECLIURL=https://files.kubiko.my.id
     ```
+  - *Hasil:* Layanan `files.kubiko.my.id` berhasil kembali normal dan mengembalikan status `HTTP/2 302 -> /login`.
 
 ### E. Penyesuaian UI & Kebutuhan Pengguna
 - **Uptime Kuma Card:** Dihapus dari katalog layanan publik (hanya memantau di background & navbar).
@@ -165,14 +165,39 @@ status.kubiko.my.id {
 - **Penghapusan Tulisan "Singapore":** Diganti dengan "Cloud VPS".
 - **Pemisahan Penjelasan Teknis:** Penjelasan arsitektur hanya ditempatkan di section Arsitektur Jaringan.
 
+### F. Manajemen Dependensi Build di VPS (Node.js 22 LTS)
+- **Gejala:** Saat menjalankan `npm install` di VPS (Node `v18.19.1`), muncul serangkaian peringatan `EBADENGINE Unsupported engine`.
+- **Temuan Kritis:**
+  - Paket `astro@5.18.2` memerlukan Node `>=20.3.0`.
+  - Paket `undici@8.12.4` secara ketat mewajibkan `node: '>=22.19.0'`.
+  - Node 20 mendekati akhir masa dukungan (EOL), sedangkan Node 22 adalah Active/Maintenance LTS modern.
+- **Solusi Standar Produksi:**
+  Upgrade Node.js di VPS menggunakan repositori resmi NodeSource v22:
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  apt-get install -y nodejs
+  ```
+  Kemudian lakukan fresh install & build:
+  ```bash
+  cd /var/www/kubiko
+  rm -rf node_modules package-lock.json
+  npm install
+  npm run build
+  chmod -R 755 /var/www/kubiko
+  ```
+
 ---
 
-## 8. Langkah Lanjutan untuk Sesi / Conversation Berikutnya
+## 8. Status Akhir & Checklist Operasional
 
-1. **Deploy Build Statis ke VPS:**
-   Salin isi folder `dist/` dari proyek ini ke VPS di direktori `/var/www/kubiko/dist`.
-   *(Bisa menggunakan rsync, scp, atau git pull + build di VPS).*
-2. **Finishing Nextcloud:**
-   Jalankan `docker compose up -d nextcloud` setelah mengubah image ke `nextcloud:33` (atau setelah migrasi v34/v35 selesai), lalu pastikan `files.kubiko.my.id` dapat dibuka.
+1. **Subdomain Reverse Proxy Caddy ke Home Server via Tailscale (100% Berfungsi):**
+   - [x] `nonton.kubiko.my.id` ➔ Jellyfin (`100.96.87.92:8096`)
+   - [x] `status.kubiko.my.id` ➔ Uptime Kuma (`100.96.87.92:3001`)
+   - [x] `pdf.kubiko.my.id` ➔ Stirling PDF (`100.96.87.92:8889`)
+   - [x] `files.kubiko.my.id` ➔ Nextcloud (`100.96.87.92:8443`)
+2. **Portal Web Utama (`kubiko.my.id`):**
+   - [x] Kode sumber Astro SSG selesai dengan palet *Warm Light Theme*.
+   - [x] Konfigurasi Caddy `/etc/caddy/Caddyfile` mengarah ke `/var/www/kubiko/dist`.
+   - [ ] Build final di VPS via Node 22 LTS (`npm run build`).
 3. **Penyelarasan Game Server (Crafty/Minecraft):**
-   Konfigurasikan subdomain game atau uji tombol salin host `crafty.kubiko.my.id`.
+   - Tombol salin host `crafty.kubiko.my.id` aktif di UI portal. Subdomain game siap diarahkan saat server Minecraft diaktifkan.

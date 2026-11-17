@@ -10,9 +10,9 @@ Portal Layanan Keluarga & Dashboard Pribadi super ringan berbasis **Astro (SSG)*
 - **Warm Light Technical Aesthetic**: Tampilan ramah mata dan mudah dibaca seluruh keluarga (*Plus Jakarta Sans* & *JetBrains Mono*).
 - **Direct Subdomain Routing**:
   - `nonton.kubiko.my.id` ➔ Jellyfin Media Server (`:8096`)
-  - `files.kubiko.my.id` ➔ Nextcloud Drive (`:8081`)
-  - `pdf.kubiko.my.id` ➔ Stirling PDF Tools (`:8080`)
-  - `crafty.kubiko.my.id` ➔ Crafty Minecraft Controller (`:8443`)
+  - `files.kubiko.my.id` ➔ Nextcloud Drive (`:8443`)
+  - `pdf.kubiko.my.id` ➔ Stirling PDF Tools (`:8889`)
+  - `crafty.kubiko.my.id` ➔ Crafty Minecraft Controller (Host Game)
   - `game.kubiko.my.id` ➔ Zona Game Keluarga (`:3002`)
   - `status.kubiko.my.id` ➔ Uptime Kuma 24/7 Monitor (`:3001`)
 - **Smart Uptime Kuma Integration**:
@@ -76,3 +76,26 @@ kubiko/
    ```bash
    npm run preview
    ```
+
+---
+
+## 🌐 Panduan Deploy ke VPS (Caddy Web Server)
+
+Pastikan VPS menggunakan **Node.js 22 LTS** agar kompatibel dengan Astro 5 dan dependensi modern:
+
+```bash
+# 1. Pasang Node.js 22 LTS (jika belum)
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+apt-get install -y nodejs
+
+# 2. Clone atau perbarui repositori di direktori /var/www/kubiko
+cd /var/www/kubiko
+git pull origin main
+
+# 3. Pasang dependensi dan bangun file statis
+npm install
+npm run build
+
+# 4. Berikan izin baca ke web server Caddy
+chmod -R 755 /var/www/kubiko
+```
