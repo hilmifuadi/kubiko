@@ -5,7 +5,7 @@ import CategoryFilter from '../components/CategoryFilter.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import AccessGuide from '../components/AccessGuide.astro';
 import { servicesData, siteConfig } from '../data/services';
-import { Film, FileText, ArrowRight, ShieldCheck, Sparkles, Server, Network, Lock, HardDrive } from 'lucide-astro';
+import { Film, FileText, ArrowRight, Sparkles, Server, Network, Lock, HardDrive, CheckCircle } from 'lucide-astro';
 
 // Quick action services
 const jellyfin = servicesData.find(s => s.id === 'jellyfin');
@@ -15,16 +15,16 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
 
 <Layout title={`${siteConfig.siteName} — ${siteConfig.tagline}`}>
   
-  <!-- Hero Section (2 Kolom Asimetris) -->
-  <section class="relative pt-8 pb-16 sm:pt-14 sm:pb-20 border-b border-warm-border/80 tech-grid-pattern">
+  <!-- Hero Section (Ramah Keluarga & Bersih) -->
+  <section class="relative pt-8 pb-14 sm:pt-12 sm:pb-18 border-b border-warm-border/80 tech-grid-pattern">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         
-        <!-- Kolom Kiri: Judul, Deskripsi & Quick Actions -->
+        <!-- Kolom Kiri: Sambutan & Akses Cepat -->
         <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-warm-sand border border-warm-border text-warm-charcoal">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs bg-warm-sand border border-warm-border text-warm-charcoal font-medium">
             <span class="w-2 h-2 rounded-full bg-warm-accent"></span>
-            <span>Self-Hosted Family Cloud • kubiko.my.id</span>
+            <span>Layanan Mandiri Keluarga • kubiko.my.id</span>
           </div>
 
           <h1 class="text-3xl sm:text-5xl lg:text-5xl font-extrabold text-warm-charcoal tracking-tight leading-[1.15]">
@@ -32,7 +32,7 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
           </h1>
 
           <p class="text-base sm:text-lg text-warm-muted leading-relaxed max-w-2xl font-normal">
-            Satu gerbang terpadu untuk mengakses layanan mandiri di rumah — mulai dari tontonan film Jellyfin, cloud drive Nextcloud, alat pengolah PDF, hingga server game keluarga tanpa perlu mengingat nomor port.
+            Satu tempat mudah untuk menonton koleksi film bersama, menyimpan cadangan foto liburan, mengolah dokumen PDF, hingga bermain game santai — gratis dan bebas iklan komersial.
           </p>
 
           <!-- Quick Action Buttons -->
@@ -42,24 +42,11 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
                 href={jellyfin.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-warm-accent text-warm-bg font-semibold text-sm hover:bg-warm-accent-hover transition-all shadow-subtle hover:scale-[1.02] active:scale-95"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-warm-accent text-warm-bg font-semibold text-sm hover:bg-warm-accent-hover transition-all shadow-subtle hover:scale-[1.02] active:scale-95"
               >
                 <Film class="w-4 h-4" />
-                <span>Nonton Jellyfin</span>
+                <span>Nonton Film & Video</span>
                 <ArrowRight class="w-4 h-4 opacity-75" />
-              </a>
-            )}
-
-            {stirlingPdf && (
-              <a 
-                href={stirlingPdf.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-semibold text-sm hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
-              >
-                <FileText class="w-4 h-4 text-warm-accent" />
-                <span>Stirling PDF</span>
-                <ArrowRight class="w-4 h-4 text-warm-muted" />
               </a>
             )}
 
@@ -68,33 +55,46 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
                 href={nextcloud.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-semibold text-sm hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-semibold text-sm hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
               >
                 <HardDrive class="w-4 h-4 text-warm-accent" />
-                <span>Nextcloud Files</span>
+                <span>Simpan Foto & File</span>
+                <ArrowRight class="w-4 h-4 text-warm-muted" />
+              </a>
+            )}
+
+            {stirlingPdf && (
+              <a 
+                href={stirlingPdf.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-semibold text-sm hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
+              >
+                <FileText class="w-4 h-4 text-warm-accent" />
+                <span>Alat PDF</span>
                 <ArrowRight class="w-4 h-4 text-warm-muted" />
               </a>
             )}
           </div>
 
-          <!-- Feature Bullets (Warm Technical Style) -->
-          <div class="pt-4 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-mono text-warm-muted">
+          <!-- Poin Ramah Keluarga -->
+          <div class="pt-3 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-warm-muted">
             <div class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-status-online"></span>
-              <span>Zero Public Router Port</span>
+              <span>100% Gratis & Bebas Iklan</span>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-status-online"></span>
-              <span>Tailscale Encrypted Mesh</span>
+              <span>Bisa di HP, Laptop & Smart TV</span>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-status-online"></span>
-              <span>Lightweight Static SSG</span>
+              <span>Akses Cepat 24 Jam</span>
             </div>
           </div>
         </div>
 
-        <!-- Kolom Kanan: Status Card ala Cloudzy -->
+        <!-- Kolom Kanan: Status Server Ringkas -->
         <div class="lg:col-span-5">
           <HeroStatusCard />
         </div>
@@ -104,21 +104,21 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
   </section>
 
   <!-- Service Bento Grid Section (Inti Halaman) -->
-  <section id="services" class="py-14 sm:py-20 scroll-mt-20">
+  <section id="services" class="py-12 sm:py-16 scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header & Filter Tabs -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-warm-muted mb-2">
+          <div class="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-warm-muted mb-1.5 font-medium">
             <span class="w-2 h-2 rounded-sm bg-warm-accent"></span>
-            <span>Direktori Layanan</span>
+            <span>Katalog Layanan</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-warm-charcoal tracking-tight">
-            Katalog Layanan Keluarga
+            Pilihan Layanan untuk Keluarga
           </h2>
           <p class="text-sm text-warm-muted mt-1 max-w-xl">
-            Klik kartu untuk membuka aplikasi di tab baru, atau gunakan tombol salin untuk alamat host server game.
+            Pilih layanan yang ingin digunakan. Klik kartu untuk langsung membukanya di tab baru.
           </p>
         </div>
 
@@ -138,23 +138,23 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
     </div>
   </section>
 
-  <!-- Panduan Akses & Tabel Subdomain Caddy (Fitur dari AI Studio yang diadopsi) -->
+  <!-- Panduan Akses Mudah -->
   <AccessGuide />
 
-  <!-- Network & Architecture Section ala Technical Documentation -->
+  <!-- Network & Architecture Section (Tempat Khusus Penjelasan Teknis) -->
   <section id="topology" class="py-14 sm:py-20 bg-warm-sand/40 border-y border-warm-border scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="max-w-3xl mb-10">
-        <div class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-warm-muted mb-2">
+        <div class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-warm-muted mb-2 font-medium">
           <span class="w-2 h-2 rounded-sm bg-warm-accent"></span>
           <span>Arsitektur Jaringan</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-warm-charcoal tracking-tight">
-          Edge Reverse Proxy over Mesh VPN
+          Bagaimana Sistem Ini Bekerja?
         </h2>
         <p class="text-sm text-warm-muted mt-2 leading-relaxed">
-          Bagaimana portal ini bekerja? Sistem mengombinasikan VPS publik mini dengan jaringan mesh privat Tailscale untuk menembus CGNAT ISP rumah tanpa membuka port router.
+          Bagian ini menjelaskan infrastruktur teknis di balik layar. Sistem menggunakan VPS publik mini dan jaringan privat terenkripsi (Tailscale) untuk menghubungkan layanan di rumah secara aman tanpa membuka port router.
         </p>
       </div>
 
@@ -167,14 +167,14 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
             <Server class="w-5 h-5 text-warm-accent" />
           </div>
           <div>
-            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 1 • Edge Layer</div>
-            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">VPS Publik (Singapore)</h3>
+            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 1 • Gerbang Luar</div>
+            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">VPS Cloud (Caddy)</h3>
           </div>
           <p class="text-warm-muted font-sans text-xs leading-relaxed">
-            Menerima permintaan HTTPS dari pengunjung melalui domain <code class="text-warm-charcoal font-mono bg-warm-sand px-1 py-0.5 rounded">kubiko.my.id</code>. Dikelola Caddy dengan SSL otomatis Let's Encrypt.
+            Menyajikan halaman web utama <code class="text-warm-charcoal font-mono bg-warm-sand px-1 py-0.5 rounded">kubiko.my.id</code> serta mengelola keamanan sertifikat SSL HTTPS otomatis.
           </p>
           <div class="pt-2 border-t border-warm-border text-[11px] text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-100">
-            ✓ Konsumsi VPS: &lt;15MB RAM (Zero runtime)
+            ✓ Sangat ringan & hemat memori
           </div>
         </div>
 
@@ -184,14 +184,14 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
             <Lock class="w-5 h-5 text-warm-accent" />
           </div>
           <div>
-            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 2 • Private Tunnel</div>
-            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">Tailscale Mesh VPN</h3>
+            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 2 • Jalur Aman</div>
+            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">Jalur Privat Terenkripsi</h3>
           </div>
           <p class="text-warm-muted font-sans text-xs leading-relaxed">
-            Koneksi terenkripsi WireGuard point-to-point antara VPS publik dan Home Server di rumah (IP Tailscale <code class="text-warm-charcoal font-mono bg-warm-sand px-1 py-0.5 rounded">100.96.87.92</code>).
+            Koneksi khusus yang menghubungkan VPS publik ke komputer server di rumah melalui jaringan Tailscale yang terenkripsi penuh.
           </p>
           <div class="pt-2 border-t border-warm-border text-[11px] text-blue-700 bg-blue-50/50 p-2 rounded-lg border border-blue-100">
-            ✓ NAT Traversal: Tembus CGNAT 100%
+            ✓ Data terlindungi & aman
           </div>
         </div>
 
@@ -201,14 +201,14 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
             <Network class="w-5 h-5 text-warm-accent" />
           </div>
           <div>
-            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 3 • Local Core</div>
-            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">Home Server (Di Rumah)</h3>
+            <div class="text-[10px] text-warm-muted uppercase tracking-wider">Tahap 3 • Server Rumah</div>
+            <h3 class="text-base font-bold text-warm-charcoal font-sans mt-0.5">Komputer di Rumah</h3>
           </div>
           <p class="text-warm-muted font-sans text-xs leading-relaxed">
-            Menjalankan Jellyfin (nonton:8096), Nextcloud (files:8081), Stirling PDF (pdf:8080), Crafty Minecraft (:8443), dan Uptime Kuma (:3001).
+            Menyimpan data film (Jellyfin), file keluarga (Nextcloud), dokumen PDF, dan game server. Seluruh berkas pribadi tetap aman di rumah.
           </p>
           <div class="pt-2 border-t border-warm-border text-[11px] text-amber-800 bg-amber-50/50 p-2 rounded-lg border border-amber-100">
-            ✓ Keamanan: Router rumah 0 port terbuka
+            ✓ Privasi file tetap berada di rumah
           </div>
         </div>
 
@@ -218,11 +218,11 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
   </section>
 
   <!-- About / Privacy Section -->
-  <section id="about" class="py-14 sm:py-20 scroll-mt-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-warm-sand border border-warm-border text-warm-charcoal">
+  <section id="about" class="py-12 sm:py-16 scroll-mt-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-warm-sand border border-warm-border text-warm-charcoal font-medium">
         <Sparkles class="w-3.5 h-3.5 text-warm-accent" />
-        <span>Dirancang Khusus Keluarga & Privasi</span>
+        <span>Khusus untuk Kenyamanan Keluarga</span>
       </div>
 
       <h2 class="text-2xl sm:text-3xl font-extrabold text-warm-charcoal tracking-tight">
@@ -230,20 +230,8 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
       </h2>
 
       <p class="text-sm sm:text-base text-warm-muted leading-relaxed font-normal">
-        Portal ini tidak memuat iklan ataupun pelacak data pihak ketiga. Dibangun dengan Static Site Generation (SSG) murni agar loading seketika dalam hitungan milidetik serta hemat bandwidth internet.
+        Portal ini tidak memuat iklan ataupun pelacak data komersial. Dibuat khusus agar seluruh anggota keluarga dapat menikmati fasilitas mandiri di rumah dengan mudah dan nyaman.
       </p>
-
-      <div class="pt-4 flex justify-center items-center gap-4">
-        <a 
-          href={siteConfig.statusPageUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border hover:border-warm-border-hover text-xs font-mono font-medium transition-colors"
-        >
-          <span>Buka Status Page Kuma</span>
-          <ArrowRight class="w-3.5 h-3.5" />
-        </a>
-      </div>
     </div>
   </section>
 

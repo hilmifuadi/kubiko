@@ -16,9 +16,9 @@ const counts = {
 
 const filterTabs = [
   { id: 'all', label: 'Semua Layanan', count: counts.all },
-  { id: 'media', label: 'Media & Streaming', count: counts.media },
-  { id: 'utility', label: 'Utilitas', count: counts.utility },
-  { id: 'game', label: 'Game Server', count: counts.game },
+  { id: 'media', label: 'Film & Video', count: counts.media },
+  { id: 'utility', label: 'File & Dokumen', count: counts.utility },
+  { id: 'game', label: 'Game Santai', count: counts.game },
 ];
 ---
 
@@ -27,14 +27,14 @@ const filterTabs = [
     <button
       type="button"
       data-filter={tab.id}
-      class={`filter-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
+      class={`filter-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
         idx === 0 
           ? 'bg-warm-accent text-warm-bg shadow-subtle' 
           : 'bg-warm-sand text-warm-charcoal border border-warm-border hover:border-warm-border-hover hover:bg-warm-border/30'
       }`}
     >
       <span>{tab.label}</span>
-      <span class={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+      <span class={`text-[10px] px-1.5 py-0.2 rounded-full ${
         idx === 0 ? 'bg-warm-bg/20 text-warm-bg' : 'bg-warm-surface text-warm-muted border border-warm-border/60'
       }`}>
         {tab.count}
