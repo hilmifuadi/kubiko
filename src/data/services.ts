@@ -1,4 +1,4 @@
-import type { ServiceItem, CaddyRoute } from '../types/service';
+import type { ServiceItem, ServiceRoute } from '../types/service';
 
 export const servicesData: ServiceItem[] = [
   {
@@ -10,7 +10,7 @@ export const servicesData: ServiceItem[] = [
     category: 'media',
     icon: 'Film',
     tag: 'Tontonan Keluarga',
-    specs: ['Bisa di HP, Tablet & TV', 'Bebas Iklan'],
+    specs: ['Bisa di HP, Tablet & TV', 'Kualitas HD', 'Bebas Iklan'],
     uptimeKumaMonitorId: 1,
     uptimeKumaKeywords: ['jellyfin', 'nonton', 'media'],
     isQuickAction: true,
@@ -25,7 +25,7 @@ export const servicesData: ServiceItem[] = [
     category: 'utility',
     icon: 'HardDrive',
     tag: 'Cloud Pribadi',
-    specs: ['Cadangan Foto HP', 'Aman & Pribadi'],
+    specs: ['Cadangan Foto HP', 'Aman & Terenkripsi', 'Penyimpanan Mandiri'],
     uptimeKumaMonitorId: 2,
     uptimeKumaKeywords: ['nextcloud', 'files', 'cloud'],
     featured: true
@@ -39,7 +39,7 @@ export const servicesData: ServiceItem[] = [
     category: 'utility',
     icon: 'FileText',
     tag: 'Alat Dokumen',
-    specs: ['Praktis & Cepat', 'Gratis Tanpa Batas'],
+    specs: ['Praktis & Cepat', 'Tanpa Batasan File', 'Privasi Terjaga'],
     uptimeKumaMonitorId: 3,
     uptimeKumaKeywords: ['stirling', 'pdf'],
     isQuickAction: true,
@@ -54,7 +54,7 @@ export const servicesData: ServiceItem[] = [
     category: 'game',
     icon: 'Gamepad2',
     tag: 'Main Bareng',
-    specs: ['Bisa Java & Bedrock', 'Tersedia 24 Jam'],
+    specs: ['Mendukung Java & Bedrock', 'Online 24 Jam', 'Dunia Survival'],
     uptimeKumaMonitorId: 4,
     uptimeKumaKeywords: ['crafty', 'minecraft', 'mc'],
     copyText: 'crafty.kubiko.my.id',
@@ -69,19 +69,19 @@ export const servicesData: ServiceItem[] = [
     category: 'game',
     icon: 'Dices',
     tag: 'Game Web',
-    specs: ['Buka Langsung di Browser'],
+    specs: ['Main Langsung di Browser', 'Tanpa Perlu Pasang Aplikasi'],
     uptimeKumaMonitorId: 5,
     uptimeKumaKeywords: ['game', 'arcade'],
     isUpcoming: true
   }
 ];
 
-export const caddyProxyChain: CaddyRoute[] = [
-  { from: 'nonton.kubiko.my.id', target: 'Nonton Film (Jellyfin)', port: ':8096', note: 'Bebas Iklan' },
-  { from: 'files.kubiko.my.id', target: 'Penyimpanan Foto & Dokumen (Nextcloud)', port: ':8443', note: 'Aman' },
-  { from: 'pdf.kubiko.my.id', target: 'Alat Pengolah PDF (Stirling)', port: ':8889', note: 'Praktis' },
-  { from: 'crafty.kubiko.my.id', target: 'Server Game Minecraft', port: ':8443', note: 'Survival' },
-  { from: 'game.kubiko.my.id', target: 'Zona Game Santai', port: ':3002', note: 'Di Browser' },
+export const caddyProxyChain: ServiceRoute[] = [
+  { from: 'nonton.kubiko.my.id', target: 'Nonton Film & Video', note: 'Bebas Iklan' },
+  { from: 'files.kubiko.my.id', target: 'Penyimpanan Berkas & Foto', note: 'Aman' },
+  { from: 'pdf.kubiko.my.id', target: 'Alat Pengolah PDF', note: 'Praktis' },
+  { from: 'crafty.kubiko.my.id', target: 'Server Game Minecraft', note: 'Survival' },
+  { from: 'game.kubiko.my.id', target: 'Zona Game Santai', note: 'Di Browser' },
 ];
 
 export const siteConfig = {
@@ -91,27 +91,5 @@ export const siteConfig = {
   description: 'Portal akses cepat layanan mandiri keluarga: nonton film, simpan foto, olah dokumen PDF, dan main game santai bersama.',
   author: 'Keluarga Kubiko',
   statusPageUrl: 'https://status.kubiko.my.id',
-  statusPageSlugs: ['family', 'kubiko', 'default'],
-  network: {
-    edgeNode: {
-      name: 'Cloud VPS',
-      ipOrHost: '160.19.166.23',
-      status: 'Online',
-      role: 'Gerbang Web & SSL Aman',
-      specs: 'Edge Reverse Proxy'
-    },
-    tunnel: {
-      name: 'Jalur Privat (Tailscale)',
-      status: 'Active',
-      type: 'Koneksi Terenkripsi Aman',
-      targetIp: '100.96.87.92',
-      cgnatBypass: 'Jalur Langsung ke Rumah'
-    },
-    homeNode: {
-      name: 'Server Rumah',
-      status: 'Connected',
-      location: 'Pusat Layanan di Rumah',
-      heartbeat: 'Siaga'
-    }
-  }
+  statusPageSlugs: ['family', 'kubiko', 'default']
 };

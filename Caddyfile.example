@@ -1,7 +1,5 @@
 # ==============================================================================
-# Caddyfile untuk Edge Reverse Proxy kubiko.my.id
-# Letakkan konfigurasi ini di VPS Edge (/etc/caddy/Caddyfile)
-# IP Tailscale Home Server: 100.96.87.92
+# Contoh Konfigurasi Caddyfile (Reverse Proxy & Static Web Server)
 # ==============================================================================
 
 # 1. Main Portal (Static Astro SSG Build) + Heartbeat Proxy
@@ -10,7 +8,7 @@ kubiko.my.id, www.kubiko.my.id {
 
     # Meneruskan API status Uptime Kuma agar tidak terkena CORS
     handle /api/status-page/* {
-        reverse_proxy 100.96.87.92:3001
+        reverse_proxy {$STATUS_BACKEND:127.0.0.1:3001}
     }
 
     # Sajikan file statis Astro murni
@@ -21,26 +19,26 @@ kubiko.my.id, www.kubiko.my.id {
     }
 }
 
-# 2. Jellyfin Media Server (Streaming Film)
+# 2. Jellyfin Media Server
 nonton.kubiko.my.id {
     encode gzip zstd
-    reverse_proxy 100.96.87.92:8096
+    reverse_proxy {$JELLYFIN_BACKEND:127.0.0.1:8096}
 }
 
 # 3. Nextcloud (Penyimpanan Berkas)
 files.kubiko.my.id {
     encode gzip zstd
-    reverse_proxy 100.96.87.92:8443
+    reverse_proxy {$NEXTCLOUD_BACKEND:127.0.0.1:8443}
 }
 
-# 4. Stirling PDF Tools (Pengolah PDF)
+# 4. Stirling PDF Tools
 pdf.kubiko.my.id {
     encode gzip zstd
-    reverse_proxy 100.96.87.92:8889
+    reverse_proxy {$PDF_BACKEND:127.0.0.1:8889}
 }
 
-# 5. Uptime Kuma Status Page (Status Monitor)
+# 5. Uptime Kuma Status Page
 status.kubiko.my.id {
     encode gzip zstd
-    reverse_proxy 100.96.87.92:3001
+    reverse_proxy {$STATUS_BACKEND:127.0.0.1:3001}
 }

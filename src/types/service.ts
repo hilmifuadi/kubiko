@@ -18,18 +18,11 @@ export interface ServiceItem {
   isUpcoming?: boolean;
 }
 
-export interface CaddyRoute {
+export interface ServiceRoute {
   from: string;
   target: string;
-  port: string;
   note?: string;
 }
 
-export interface NetworkNodeStatus {
-  name: string;
-  type: 'edge' | 'tunnel' | 'home';
-  label: string;
-  value: string;
-  status: 'online' | 'offline' | 'active';
-  meta?: string;
-}
+// Alias for compatibility
+export type CaddyRoute = ServiceRoute;
