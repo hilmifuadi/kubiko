@@ -10,6 +10,7 @@ Portal Layanan Keluarga & Dashboard Mandiri super ringan berbasis **Astro (SSG)*
 - **Warm Light Aesthetic**: Tampilan bernuansa hangat, bersih, dan nyaman di mata seluruh anggota keluarga dengan tipografi modern (*Plus Jakarta Sans*).
 - **Katalog Layanan Keluarga**:
   - 🎬 **Nonton Film & Video**: Akses ke koleksi hiburan tontonan keluarga.
+  - 🎟️ **Permintaan Film & Serial**: Ajukan judul baru lewat Seerr dan pantau sampai siap ditonton.
   - 📂 **Penyimpanan Berkas**: Tempat aman mencadangkan foto liburan dan dokumen keluarga.
   - 📄 **Pengolah PDF**: Utilitas praktis untuk menggabungkan, memisahkan, dan mengompres berkas PDF.
   - 🎮 **Server Game**: Akses game bersama untuk keluarga dan teman.
