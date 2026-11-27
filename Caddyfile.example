@@ -14,7 +14,7 @@ kubiko.my.id, www.kubiko.my.id {
     # Sajikan file statis Astro murni
     handle {
         root * /var/www/kubiko/dist
-        try_files {path} /index.html
+        try_files {path} {path}/ /index.html
         file_server
     }
 }
