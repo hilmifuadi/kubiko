@@ -17,6 +17,20 @@ export const servicesData: ServiceItem[] = [
     featured: true
   },
   {
+    id: 'seerr',
+    name: 'Permintaan Film & Serial',
+    description: 'Ajukan film atau serial favorit keluarga, lalu pantau prosesnya sampai siap ditonton di Jellyfin.',
+    url: 'https://request.kubiko.my.id',
+    subdomain: 'request.kubiko.my.id',
+    category: 'media',
+    icon: 'Ticket',
+    tag: 'Request Media',
+    specs: ['Ajukan Film & Serial', 'Terhubung Jellyfin', 'Pantau Status'],
+    uptimeKumaKeywords: ['seerr', 'request', 'permintaan', 'jellyseerr'],
+    isQuickAction: true,
+    featured: true
+  },
+  {
     id: 'nextcloud',
     name: 'Penyimpanan Berkas',
     description: 'Tempat aman menyimpan foto liburan, dokumen penting, dan berbagi berkas antar anggota keluarga.',
@@ -90,6 +104,7 @@ export const servicesData: ServiceItem[] = [
 
 export const caddyProxyChain: ServiceRoute[] = [
   { from: 'nonton.kubiko.my.id', target: 'Nonton Film & Video', note: 'Bebas Iklan' },
+  { from: 'request.kubiko.my.id', target: 'Permintaan Film & Serial', note: 'Request Media' },
   { from: 'files.kubiko.my.id', target: 'Penyimpanan Berkas & Foto', note: 'Aman' },
   { from: 'pdf.kubiko.my.id', target: 'Alat Pengolah PDF', note: 'Praktis' },
   { from: 'crafty.kubiko.my.id', target: 'Server Game Minecraft', note: 'Survival' },
@@ -101,7 +116,7 @@ export const siteConfig = {
   domain: 'kubiko.my.id',
   siteName: 'Kubiko Portal',
   tagline: 'Pusat Hiburan & Utilitas Keluarga',
-  description: 'Portal akses cepat layanan mandiri keluarga: nonton film, simpan foto, olah dokumen PDF, dan main game santai bersama.',
+  description: 'Portal akses cepat layanan mandiri keluarga: nonton film, ajukan film & serial, simpan foto, olah dokumen PDF, dan main game santai bersama.',
   author: 'Keluarga Kubiko',
   statusPageUrl: 'https://status.kubiko.my.id',
   statusPageSlugs: ['family', 'kubiko', 'default']

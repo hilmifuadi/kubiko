@@ -5,17 +5,35 @@ export default {
     extend: {
       colors: {
         warm: {
-          bg: '#FAF9F6',
+          bg: '#FAF7F0',
           surface: '#FFFFFF',
-          sand: '#F2EFE9',
-          border: '#E6E2D8',
-          'border-hover': '#D1CCC0',
-          charcoal: '#1C1B18',
-          muted: '#6E6A61',
-          accent: '#3D6B58',
-          'accent-hover': '#325747',
-          terracotta: '#C86D51',
-          'terracotta-hover': '#B25B40'
+          sand: '#F2ECE1',
+          border: '#E2D9CC',
+          'border-hover': '#C8BEAF',
+          charcoal: '#161513',
+          muted: '#666159',
+          accent: '#161513',
+          'accent-hover': '#2C2A26',
+          terracotta: '#DE5D35',
+          'terracotta-hover': '#C64E29',
+          yellow: '#EAA838',
+          'yellow-hover': '#D99625',
+          'yellow-light': '#FDE8BE',
+        },
+        editorial: {
+          bg: '#FAF7F0',
+          surface: '#FFFFFF',
+          sand: '#F2ECE1',
+          dark: '#161513',
+          darker: '#0F0E0D',
+          muted: '#6B655D',
+          border: '#161513',
+          'border-light': '#E2D9CC',
+          yellow: '#EAA838',
+          'yellow-hover': '#D99625',
+          terracotta: '#DE5D35',
+          'terracotta-hover': '#C64E29',
+          cream: '#FFFDF9',
         },
         status: {
           online: '#10B981',
@@ -24,13 +42,19 @@ export default {
         }
       },
       fontFamily: {
+        serif: ['"DM Serif Display"', '"Playfair Display"', 'Georgia', 'serif'],
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace']
       },
       boxShadow: {
-        'subtle': '0 1px 3px 0 rgba(28, 27, 24, 0.04), 0 1px 2px -1px rgba(28, 27, 24, 0.04)',
-        'card': '0 4px 6px -1px rgba(28, 27, 24, 0.05), 0 2px 4px -2px rgba(28, 27, 24, 0.05)',
-        'card-hover': '0 10px 15px -3px rgba(28, 27, 24, 0.08), 0 4px 6px -4px rgba(28, 27, 24, 0.04)'
+        'subtle': '0 1px 3px 0 rgba(22, 21, 19, 0.05), 0 1px 2px -1px rgba(22, 21, 19, 0.05)',
+        'card': '0 4px 6px -1px rgba(22, 21, 19, 0.05), 0 2px 4px -2px rgba(22, 21, 19, 0.05)',
+        'card-hover': '0 12px 20px -3px rgba(22, 21, 19, 0.09), 0 4px 6px -4px rgba(22, 21, 19, 0.05)',
+        'brutal-sm': '2px 2px 0px 0px #161513',
+        'brutal': '3px 3px 0px 0px #161513',
+        'brutal-lg': '5px 5px 0px 0px #161513',
+        'brutal-yellow': '4px 4px 0px 0px #EAA838',
+        'brutal-terracotta': '4px 4px 0px 0px #DE5D35',
       }
     },
   },

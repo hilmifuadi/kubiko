@@ -1,97 +1,114 @@
 ---
 import { siteConfig } from '../data/services';
-import { Activity, ShieldCheck, Heart, ArrowUpRight, Github } from 'lucide-astro';
+import { ArrowUpRight, Github } from 'lucide-astro';
 ---
 
-<footer class="mt-20 border-t border-warm-border bg-warm-sand/60">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<footer class="border-t-2 border-[#161513] bg-[#161513] text-[#FAF7F0]" id="tentang">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
       
-      <!-- Col 1: Brand & Desc -->
-      <div class="md:col-span-2 space-y-3">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-warm-accent flex items-center justify-center text-warm-bg font-bold text-xs">
-            K
-          </div>
-          <span class="font-bold text-base text-warm-charcoal tracking-tight">
-            kubiko<span class="text-warm-accent">.my.id</span>
+      <!-- Col 1: Brand & Sunburst Emblem -->
+      <div class="md:col-span-5 space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-[#DE5D35] text-[#FAF7F0] flex items-center justify-center font-black">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2l2.4 4.8 5.3-2.1-2.1 5.3 4.8 2.4-4.8 2.4 2.1 5.3-5.3-2.1-2.4 4.8-2.4-4.8-5.3 2.1 2.1-5.3-4.8-2.4 4.8-2.4-2.1-5.3 5.3 2.1z"/>
+            </svg>
+          </span>
+          <span class="font-serif font-black text-3xl tracking-tight text-[#FAF7F0]" translate="no">
+            KUBIKO
           </span>
         </div>
-        <p class="text-xs text-warm-muted leading-relaxed max-w-md">
-          Portal mandiri keluarga untuk hiburan bersama, penyimpanan berkas, dan berbagai utilitas praktis sehari-hari secara aman, cepat, dan nyaman.
+        
+        <p class="text-sm text-[#A8A29E] leading-relaxed max-w-sm text-pretty">
+          Portal mandiri keluarga untuk hiburan bersama, penyimpanan foto dan berkas, serta utilitas praktis tanpa gangguan komersial.
         </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-warm-muted">
-          <span class="inline-block w-2 h-2 rounded-full bg-status-online"></span>
-          <span>Akses Mandiri Keluarga • 100% Bebas Iklan</span>
+
+        <div class="pt-2 flex items-center gap-3">
+          <a 
+            href="https://github.com/muhaliakbar14-cyber/kubiko" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="w-10 h-10 rounded-full border border-stone-700 bg-stone-900 hover:bg-[#EAA838] hover:text-[#161513] hover:border-[#161513] flex items-center justify-center text-[#FAF7F0] transition-[background-color,color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]"
+            aria-label="Kunjungi repositori GitHub Kubiko"
+          >
+            <Github class="w-4 h-4" aria-hidden="true" />
+          </a>
+          <span class="text-xs font-mono text-[#A8A29E]">v1.0 • SSG Powered</span>
         </div>
       </div>
 
-      <!-- Col 2: Akses Cepat -->
-      <div class="space-y-2.5">
-        <h4 class="font-mono text-xs uppercase tracking-wider text-warm-charcoal font-semibold">Tautan Cepat</h4>
-        <ul class="space-y-2 text-xs text-warm-muted">
+      <!-- Col 2: Navigasi Cepat -->
+      <div class="md:col-span-2 space-y-3">
+        <h4 class="font-mono text-xs uppercase tracking-widest text-[#EAA838] font-bold">NAVIGASI</h4>
+        <ul class="space-y-2.5 text-xs text-[#D6D3D1]">
+          <li><a href="/#services" class="hover:text-[#EAA838] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">Layanan Utama</a></li>
+          <li><a href="/#fitur" class="hover:text-[#EAA838] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">Fitur Keluarga</a></li>
+          <li><a href="/#panduan" class="hover:text-[#EAA838] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">Panduan Akses</a></li>
+          <li><a href="/#subdomain-routes" class="hover:text-[#EAA838] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">Alamat Web</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Layanan Cepat -->
+      <div class="md:col-span-3 space-y-3">
+        <h4 class="font-mono text-xs uppercase tracking-widest text-[#EAA838] font-bold">LAYANAN</h4>
+        <ul class="space-y-2.5 text-xs text-[#D6D3D1]">
           <li>
-            <a href="https://nonton.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-warm-accent transition-colors flex items-center gap-1">
-              Nonton Film & Video
-              <ArrowUpRight class="w-3 h-3 opacity-60" />
+            <a href="https://nonton.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#EAA838] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">
+              <span>Nonton Film & Video</span>
+              <ArrowUpRight class="w-3 h-3 text-[#A8A29E]" aria-hidden="true" />
             </a>
           </li>
           <li>
-            <a href="https://files.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-warm-accent transition-colors flex items-center gap-1">
-              Penyimpanan Berkas (Nextcloud)
-              <ArrowUpRight class="w-3 h-3 opacity-60" />
+            <a href="https://files.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#EAA838] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">
+              <span>Penyimpanan Berkas</span>
+              <ArrowUpRight class="w-3 h-3 text-[#A8A29E]" aria-hidden="true" />
             </a>
           </li>
           <li>
-            <a href="https://pdf.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-warm-accent transition-colors flex items-center gap-1">
-              Pengolah PDF (Stirling)
-              <ArrowUpRight class="w-3 h-3 opacity-60" />
+            <a href="https://pdf.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#EAA838] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">
+              <span>Pengolah Dokumen PDF</span>
+              <ArrowUpRight class="w-3 h-3 text-[#A8A29E]" aria-hidden="true" />
             </a>
           </li>
           <li>
-            <a href="https://crafty.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-warm-accent transition-colors flex items-center gap-1">
-              Server Game Minecraft
-              <ArrowUpRight class="w-3 h-3 opacity-60" />
+            <a href="https://crafty.kubiko.my.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#EAA838] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">
+              <span>Server Minecraft</span>
+              <ArrowUpRight class="w-3 h-3 text-[#A8A29E]" aria-hidden="true" />
             </a>
           </li>
           <li>
-            <a href="/math-hero" class="hover:text-warm-accent transition-colors flex items-center gap-1">
-              Math Hero (Game Edukasi)
-              <ArrowUpRight class="w-3 h-3 opacity-60" />
+            <a href="/math-hero" class="hover:text-[#EAA838] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]">
+              <span>Math Hero (Game Edukasi)</span>
+              <ArrowUpRight class="w-3 h-3 text-[#A8A29E]" aria-hidden="true" />
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- Col 3: Kenyamanan & Privasi -->
-      <div class="space-y-2.5">
-        <h4 class="font-mono text-xs uppercase tracking-wider text-warm-charcoal font-semibold">Kenyamanan</h4>
-        <ul class="space-y-2 text-xs text-warm-muted">
-          <li class="flex items-center gap-2">
-            <span class="text-status-online">✓</span>
-            <span>Akses Mudah Multi-Perangkat</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-status-online">✓</span>
-            <span>Bebas Pelacak & Iklan</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-status-online">✓</span>
-            <span>Pemantauan Status Real-Time</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-status-online">✓</span>
-            <span>Privasi Data Keluarga Terjaga</span>
-          </li>
-        </ul>
+      <!-- Col 4: Circular Badge Stamp -->
+      <div class="md:col-span-2 flex flex-col items-center md:items-end justify-center">
+        <div class="relative w-24 h-24 rounded-full border-2 border-dashed border-[#EAA838] flex items-center justify-center text-center p-2">
+          <div class="absolute inset-0 flex items-center justify-center animate-spin-slow pointer-events-none">
+            <svg class="w-full h-full text-[#EAA838]" viewBox="0 0 100 100" fill="none">
+              <path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="transparent"/>
+              <text class="text-[9px] uppercase font-mono font-bold tracking-widest" fill="currentColor">
+                <textPath xlink:href="#circlePath" startOffset="0%">
+                  • KUBIKO MANDIRI • 100% BEBAS IKLAN 
+                </textPath>
+              </text>
+            </svg>
+          </div>
+          <span class="text-xs font-serif font-black text-[#DE5D35]">✦</span>
+        </div>
       </div>
 
     </div>
 
     <!-- Bottom Row -->
-    <div class="pt-6 border-t border-warm-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-warm-muted">
+    <div class="pt-8 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A8A29E]">
       <div>
-        © {new Date().getFullYear()} <strong class="text-warm-charcoal">kubiko.my.id</strong>. Hak Cipta Terpelihara.
+        © {new Date().getFullYear()} <strong class="text-[#FAF7F0]" translate="no">kubiko.my.id</strong>. Hak Cipta Terpelihara untuk Keluarga.
       </div>
       
       <div class="flex items-center gap-4">
@@ -99,20 +116,10 @@ import { Activity, ShieldCheck, Heart, ArrowUpRight, Github } from 'lucide-astro
           href={siteConfig.statusPageUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="inline-flex items-center gap-1 hover:text-warm-accent transition-colors"
+          class="inline-flex items-center gap-1.5 hover:text-[#EAA838] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]"
         >
-          <Activity class="w-3.5 h-3.5 text-warm-accent" />
-          <span>Status Sistem</span>
-        </a>
-        <span>•</span>
-        <a 
-          href="https://github.com/muhaliakbar14-cyber/kubiko" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="inline-flex items-center gap-1 hover:text-warm-charcoal transition-colors"
-        >
-          <Github class="w-3.5 h-3.5" />
-          <span>GitHub</span>
+          <span class="w-2 h-2 rounded-full bg-status-online inline-block" aria-hidden="true"></span>
+          <span>Status Uptime Kuma</span>
         </a>
       </div>
     </div>

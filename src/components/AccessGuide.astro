@@ -1,112 +1,116 @@
 ---
 import { caddyProxyChain } from '../data/services';
-import { Copy, ArrowUpRight, ShieldCheck, Heart } from 'lucide-astro';
+import { Copy, ArrowUpRight, Heart, Sparkles } from 'lucide-astro';
 
 const accessSteps = [
   {
     step: '01',
     title: 'Pilih Layanan',
-    detail: 'Klik layanan yang ingin Anda pakai di atas (film, penyimpanan file, dokumen, atau game).'
+    detail: 'Klik salah satu layanan yang ingin Anda gunakan (film, cloud file, dokumen, atau game).'
   },
   {
     step: '02',
     title: 'Masuk dengan Akun Pribadi',
-    detail: 'Gunakan akun yang telah didaftarkan untuk menonton film pribadi atau mengakses file Anda.'
+    detail: 'Gunakan akun yang telah didaftarkan untuk menonton film atau mengakses berkas pribadi Anda.'
   },
   {
     step: '03',
     title: 'Nikmati Sepuasnya',
-    detail: 'Seluruh layanan ini gratis dan bebas dari iklan komersial untuk kenyamanan keluarga.'
+    detail: 'Seluruh utilitas ini 100% gratis dan bebas dari iklan komersial untuk kenyamanan seluruh keluarga.'
   }
 ];
 ---
 
-<section id="panduan" class="py-12 sm:py-16 border-t border-warm-border scroll-mt-20">
+<section id="panduan" class="py-16 sm:py-24 border-t-2 border-[#161513] bg-[#FAF7F0] scroll-mt-20 sm:scroll-mt-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
       
       <!-- Kolom Kiri: 3 Langkah Sederhana -->
-      <div class="lg:col-span-5 space-y-5">
+      <div class="lg:col-span-5 space-y-6">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-warm-muted mb-1.5 font-medium">
-            <span class="w-2 h-2 rounded-sm bg-warm-accent"></span>
-            <span>Panduan Mudah</span>
-          </div>
-          <h2 class="text-2xl font-bold text-warm-charcoal tracking-tight">
-            Cara Menggunakan Layanan
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#DE5D35] text-[#FAF7F0] border border-[#161513] shadow-brutal-sm mb-3">
+            PANDUAN MUDAH
+          </span>
+          <h2 class="font-serif font-black text-3xl sm:text-4xl text-[#161513] tracking-tight text-balance">
+            Cara Menggunakan Layanan.
           </h2>
-          <p class="text-sm text-warm-muted mt-1 leading-relaxed">
-            Tidak perlu pengaturan rumit, cukup buka lewat browser di HP, laptop, atau smart TV Anda.
+          <p class="text-sm text-[#6B655D] mt-2 leading-relaxed text-pretty">
+            Tidak memerlukan instalasi yang rumit. Cukup akses melalui peramban web di HP, tablet, laptop, atau Smart TV keluarga.
           </p>
         </div>
 
-        <div class="divide-y divide-warm-border border-y border-warm-border">
+        <div class="divide-y-2 divide-[#161513] border-y-2 border-[#161513]">
           {accessSteps.map((item) => (
-            <div class="py-3.5 flex items-start gap-3.5">
-              <span class="font-bold text-xs text-warm-accent pt-0.5 shrink-0">
-                {item.step}.
+            <div class="py-4 flex items-start gap-4">
+              <span class="w-8 h-8 rounded-full bg-[#EAA838] border-2 border-[#161513] text-[#161513] font-mono font-black text-xs flex items-center justify-center shrink-0 shadow-brutal-sm">
+                {item.step}
               </span>
               <div>
-                <h3 class="text-sm font-semibold text-warm-charcoal">{item.title}</h3>
-                <p class="mt-0.5 text-xs text-warm-muted leading-relaxed">{item.detail}</p>
+                <h3 class="font-bold text-sm text-[#161513] uppercase tracking-wide">{item.title}</h3>
+                <p class="mt-1 text-xs text-[#6B655D] leading-relaxed">{item.detail}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <div class="p-3.5 rounded-xl bg-warm-sand/80 border border-warm-border text-xs text-warm-muted flex items-center gap-3">
-          <Heart class="w-4 h-4 text-warm-terracotta shrink-0" />
-          <span>Disediakan khusus untuk kemudahan dan hiburan seluruh keluarga.</span>
+        <div class="p-4 rounded-2xl bg-[#F2ECE1] border-2 border-[#161513] text-xs text-[#161513] flex items-center gap-3 shadow-brutal-sm">
+          <Heart class="w-5 h-5 text-[#DE5D35] shrink-0" aria-hidden="true" />
+          <span class="font-medium">Dikelola dan dirawat khusus untuk kenyamanan digital seluruh anggota keluarga.</span>
         </div>
       </div>
 
       <!-- Kolom Kanan: Daftar Alamat Web Ramah Pengguna -->
-      <div id="subdomain-routes" class="lg:col-span-7 bg-warm-surface rounded-2xl border border-warm-border shadow-card overflow-hidden">
+      <div id="subdomain-routes" class="lg:col-span-7 bg-white rounded-3xl border-2 border-[#161513] shadow-brutal overflow-hidden scroll-mt-20 sm:scroll-mt-24">
         
-        <div class="px-5 py-3.5 bg-warm-sand/60 border-b border-warm-border flex items-center justify-between gap-4">
+        <div class="px-6 py-4 bg-[#F2ECE1] border-b-2 border-[#161513] flex items-center justify-between gap-4">
           <div>
-            <h3 class="font-bold text-sm text-warm-charcoal font-sans">
-              Daftar Alamat Web
+            <h3 class="font-serif font-black text-lg text-[#161513]">
+              Daftar Alamat Web Resmi
             </h3>
-            <p class="text-xs text-warm-muted">Bisa disimpan di bookmark browser Anda</p>
+            <p class="text-xs text-[#6B655D] font-mono">Bisa disimpan di penanda (bookmark) peramban Anda</p>
           </div>
+          <span class="w-8 h-8 rounded-full bg-white border border-[#161513] flex items-center justify-center text-[#DE5D35] shadow-brutal-sm">
+            <Sparkles class="w-4 h-4" aria-hidden="true" />
+          </span>
         </div>
 
-        <div class="divide-y divide-warm-border/60 text-xs">
+        <div class="divide-y-2 divide-[#161513] text-xs">
           {caddyProxyChain.map((route) => {
             const fullUrl = `https://${route.from}`;
             return (
-              <div class="p-4 flex items-center justify-between gap-4 hover:bg-warm-sand/30 transition-colors">
+              <div class="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#FAF7F0] transition-colors">
                 <div class="min-w-0">
-                  <div class="font-medium text-warm-charcoal text-sm truncate">
+                  <div class="font-bold text-[#161513] text-sm sm:text-base truncate">
                     {route.target}
                   </div>
-                  <div class="text-xs text-warm-muted font-mono mt-0.5 truncate">
+                  <div class="text-xs font-mono font-bold text-[#DE5D35] mt-0.5 truncate" translate="no">
                     {route.from}
                   </div>
                 </div>
 
-                <div class="flex items-center gap-2 shrink-0">
+                <div class="flex items-center gap-2.5 shrink-0">
                   <button
                     type="button"
-                    class="copy-btn px-2.5 py-1.5 rounded-lg border border-warm-border hover:bg-warm-sand text-warm-charcoal transition-colors cursor-pointer text-xs font-medium inline-flex items-center gap-1.5"
+                    class="copy-btn min-h-[38px] px-3.5 py-1.5 rounded-full border-2 border-[#161513] bg-white hover:bg-[#EAA838] text-[#161513] transition-[background-color,transform] cursor-pointer text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 shadow-brutal-sm active:translate-x-0.5 active:translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
                     data-copy-text={route.from}
                     data-service-name={route.target}
-                    title={`Salin ${route.from}`}
+                    aria-label={`Salin alamat ${route.from} untuk ${route.target}`}
+                    title={`Salin alamat ${route.from}`}
                   >
-                    <Copy class="w-3.5 h-3.5 text-warm-muted" />
+                    <Copy class="w-3.5 h-3.5 text-[#161513]" aria-hidden="true" />
                     <span class="copy-label hidden sm:inline">Salin</span>
                   </button>
                   <a
                     href={fullUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="px-3 py-1.5 rounded-lg bg-warm-charcoal hover:bg-warm-accent text-warm-bg transition-colors inline-flex items-center gap-1 text-xs font-medium"
-                    title={`Buka ${fullUrl}`}
+                    class="min-h-[38px] px-4 py-1.5 rounded-full bg-[#161513] hover:bg-[#DE5D35] text-[#FAF7F0] border-2 border-[#161513] transition-[background-color,transform] inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
+                    title={`Buka ${fullUrl} di tab baru`}
+                    aria-label={`Buka ${fullUrl} di tab baru`}
                   >
                     <span>Buka</span>
-                    <ArrowUpRight class="w-3.5 h-3.5" />
+                    <ArrowUpRight class="w-3.5 h-3.5 stroke-[2.5]" aria-hidden="true" />
                   </a>
                 </div>
               </div>

@@ -5,96 +5,93 @@ import CategoryFilter from '../components/CategoryFilter.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import AccessGuide from '../components/AccessGuide.astro';
 import { servicesData, siteConfig } from '../data/services';
-import { Film, FileText, ArrowRight, Sparkles, HardDrive } from 'lucide-astro';
-
-// Quick action services
-const jellyfin = servicesData.find(s => s.id === 'jellyfin');
-const stirlingPdf = servicesData.find(s => s.id === 'stirling-pdf');
-const nextcloud = servicesData.find(s => s.id === 'nextcloud');
+import { Film, HardDrive, FileText, Gamepad2, ArrowRight, ArrowUpRight, Sparkles } from 'lucide-astro';
 ---
 
 <Layout title={`${siteConfig.siteName} — ${siteConfig.tagline}`}>
   
-  <!-- Hero Section (Ramah Keluarga & Bersih) -->
-  <section class="relative pt-8 pb-14 sm:pt-14 sm:pb-20 border-b border-warm-border/80 tech-grid-pattern">
+  <!-- 1. Hero Section (Bold Editorial / Neo-Brutalist Aesthetic) -->
+  <section class="relative pt-10 pb-16 sm:pt-16 sm:pb-24 border-b-2 border-[#161513] bg-[#FAF7F0] tech-grid-pattern warm-glow overflow-hidden">
+    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         
-        <!-- Kolom Kiri: Sambutan & Akses Cepat -->
-        <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs bg-warm-sand border border-warm-border text-warm-charcoal font-semibold shadow-subtle">
-            <span class="w-2 h-2 rounded-full bg-warm-accent"></span>
-            <span>Layanan Mandiri Keluarga • kubiko.my.id</span>
+        <!-- Kolom Kiri: Headline Raksasa & Panggilan Aksi -->
+        <div class="lg:col-span-7 space-y-6 sm:space-y-7">
+          
+          <!-- Overline Tag Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#DE5D35] text-[#FAF7F0] border-2 border-[#161513] shadow-brutal-sm">
+            <span class="w-2 h-2 rounded-full bg-[#FAF7F0]" aria-hidden="true"></span>
+            <span>PORTAL RESMI KELUARGA • <span translate="no">kubiko.my.id</span></span>
           </div>
 
-          <h1 class="text-3xl sm:text-5xl lg:text-5xl font-extrabold text-warm-charcoal tracking-tight leading-[1.15]">
-            Pusat Hiburan & Utilitas <span class="text-warm-accent">Keluarga</span>.
-          </h1>
+          <!-- Headline Raksasa dengan Circular Stamp Badge -->
+          <div class="relative">
+            <h1 class="font-serif font-black text-6xl sm:text-7xl lg:text-8xl tracking-tight text-[#161513] leading-[0.92] text-balance">
+              KUBIKO<br/>
+              <span>PORTAL<span class="text-[#DE5D35]">.</span></span>
+            </h1>
 
-          <p class="text-base sm:text-lg text-warm-muted leading-relaxed max-w-2xl font-normal">
-            Satu tempat mudah untuk menonton koleksi film bersama, menyimpan cadangan foto liburan, mengolah dokumen PDF, hingga bermain game santai — gratis dan bebas iklan komersial.
+            <!-- Rotating Circular Stamp (Matching reference visual graphic) -->
+            <div class="hidden sm:inline-flex absolute -top-4 right-4 lg:right-16 items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-dashed border-[#DE5D35] text-[#DE5D35] pointer-events-none" aria-hidden="true">
+              <div class="w-full h-full animate-spin-slow flex items-center justify-center">
+                <svg class="w-full h-full" viewBox="0 0 100 100">
+                  <path id="stampPathHero" d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" fill="transparent"/>
+                  <text class="text-[9.5px] uppercase font-mono font-bold tracking-widest" fill="currentColor">
+                    <textPath xlink:href="#stampPathHero" startOffset="0%">
+                      ★ PORTAL KELUARGA ★ 100% BEBAS IKLAN 
+                    </textPath>
+                  </text>
+                </svg>
+              </div>
+              <span class="absolute text-base font-serif font-black">✦</span>
+            </div>
+          </div>
+
+          <!-- Deskripsi Utama -->
+          <p class="text-base sm:text-lg text-[#6B655D] leading-relaxed max-w-xl font-medium text-pretty">
+            Satu tempat mandiri untuk menonton koleksi film bersama, mencadangkan foto liburan, mengolah dokumen PDF, hingga bermain Minecraft — 100% gratis, aman, dan tanpa iklan komersial.
           </p>
 
-          <!-- Quick Action Buttons -->
+          <!-- Action Buttons (Bold Yellow Pill & White Pill) -->
           <div class="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
-            {jellyfin && (
-              <a 
-                href={jellyfin.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-warm-accent text-warm-bg font-bold text-sm sm:text-base hover:bg-warm-accent-hover transition-all shadow-subtle hover:scale-[1.02] active:scale-95"
-              >
-                <Film class="w-5 h-5" />
-                <span>Nonton Film & Video</span>
-                <ArrowRight class="w-4 h-4 opacity-80" />
-              </a>
-            )}
+            <a 
+              href="#services"
+              class="inline-flex items-center gap-2.5 px-7 py-3.5 sm:py-4 rounded-full bg-[#EAA838] text-[#161513] border-2 border-[#161513] font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-[#D99625] transition-[background-color,transform,box-shadow] shadow-brutal hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+            >
+              <span>Jelajahi Layanan</span>
+              <ArrowRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+            </a>
 
-            {nextcloud && (
-              <a 
-                href={nextcloud.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2.5 px-5 py-3.5 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-bold text-sm sm:text-base hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
-              >
-                <HardDrive class="w-5 h-5 text-warm-accent" />
-                <span>Simpan Foto & File</span>
-                <ArrowRight class="w-4 h-4 text-warm-muted" />
-              </a>
-            )}
-
-            {stirlingPdf && (
-              <a 
-                href={stirlingPdf.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-warm-sand text-warm-charcoal border border-warm-border font-semibold text-sm hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle active:scale-95"
-              >
-                <FileText class="w-4 h-4 text-warm-accent" />
-                <span>Alat PDF</span>
-                <ArrowRight class="w-4 h-4 text-warm-muted" />
-              </a>
-            )}
+            <a 
+              href={siteConfig.statusPageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-6 py-3.5 sm:py-4 rounded-full bg-white text-[#161513] border-2 border-[#161513] font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-[#F2ECE1] transition-[background-color,transform,box-shadow] shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+            >
+              <span>Status Sistem</span>
+              <ArrowUpRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+            </a>
           </div>
 
-          <!-- Poin Ramah Keluarga -->
-          <div class="pt-3 flex flex-wrap items-center gap-y-2.5 gap-x-6 text-xs sm:text-sm text-warm-muted font-medium">
+          <!-- 3 Poin Keunggulan Utama -->
+          <div class="pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs sm:text-sm text-[#161513] font-bold font-mono">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-status-online"></span>
-              <span>100% Gratis & Bebas Iklan</span>
+              <span class="w-2 h-2 rounded-full bg-status-online" aria-hidden="true"></span>
+              <span>100% Bebas Iklan</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-status-online"></span>
-              <span>Bisa di HP, Laptop & Smart TV</span>
+              <span class="w-2 h-2 rounded-full bg-[#EAA838]" aria-hidden="true"></span>
+              <span>Multi-Perangkat</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-status-online"></span>
-              <span>Akses Cepat 24 Jam</span>
+              <span class="w-2 h-2 rounded-full bg-[#DE5D35]" aria-hidden="true"></span>
+              <span>Akses 24 Jam</span>
             </div>
           </div>
         </div>
 
-        <!-- Kolom Kanan: Status Layanan Ringkas -->
+        <!-- Kolom Kanan: Status Layanan Ringkas & Telemetri Card -->
         <div class="lg:col-span-5">
           <HeroStatusCard />
         </div>
@@ -103,32 +100,103 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
     </div>
   </section>
 
-  <!-- Service Bento Grid Section (Katalog Layanan Lebih Besar & Jelas) -->
-  <section id="services" class="py-14 sm:py-20 scroll-mt-20">
+  <!-- 2. Full-Bleed Dark Band (SERVICES / WHAT WE OFFER - Matching Reference Image Dark Strip) -->
+  <section id="fitur" class="bg-[#161513] text-[#FAF7F0] border-b-2 border-[#161513] py-14 sm:py-18 scroll-mt-20 sm:scroll-mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left Title with Wavy Underline -->
+        <div class="lg:col-span-4 space-y-3">
+          <span class="font-mono text-xs font-bold uppercase tracking-widest text-[#EAA838]">
+            FITUR & UTILITAS
+          </span>
+          <h2 class="font-serif font-black text-3xl sm:text-4xl text-[#FAF7F0] tracking-tight text-balance">
+            Koleksi lengkap untuk keluarga.
+          </h2>
+          <!-- Squiggly Orange Decorative Underline (Matching Reference Image) -->
+          <svg class="w-28 h-4 text-[#DE5D35]" viewBox="0 0 100 12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+            <path d="M2 6 Q 15 1, 28 6 T 54 6 T 80 6 T 98 6" />
+          </svg>
+        </div>
+
+        <!-- 4 Service Pillars with Dividers (Matching Reference Grid) -->
+        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x lg:divide-stone-800">
+          
+          <!-- Pillar 1 -->
+          <div class="lg:px-6 space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-stone-900 border border-stone-700 flex items-center justify-center text-[#DE5D35]">
+              <Film class="w-4 h-4" aria-hidden="true" />
+            </div>
+            <h3 class="font-bold text-sm text-[#FAF7F0]">Nonton Film</h3>
+            <p class="text-xs text-[#A8A29E] leading-relaxed">
+              Streaming film, serial, & animasi keluarga tanpa iklan.
+            </p>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="lg:px-6 space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-stone-900 border border-stone-700 flex items-center justify-center text-[#EAA838]">
+              <HardDrive class="w-4 h-4" aria-hidden="true" />
+            </div>
+            <h3 class="font-bold text-sm text-[#FAF7F0]">Simpan Berkas</h3>
+            <p class="text-xs text-[#A8A29E] leading-relaxed">
+              Cadangkan foto liburan & dokumen penting dengan aman.
+            </p>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="lg:px-6 space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-stone-900 border border-stone-700 flex items-center justify-center text-[#FAF7F0]">
+              <FileText class="w-4 h-4" aria-hidden="true" />
+            </div>
+            <h3 class="font-bold text-sm text-[#FAF7F0]">Olah Dokumen</h3>
+            <p class="text-xs text-[#A8A29E] leading-relaxed">
+              Gabung, pisah, & kompres file PDF seketika di peramban.
+            </p>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="lg:px-6 space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-stone-900 border border-stone-700 flex items-center justify-center text-[#DE5D35]">
+              <Gamepad2 class="w-4 h-4" aria-hidden="true" />
+            </div>
+            <h3 class="font-bold text-sm text-[#FAF7F0]">Server Game</h3>
+            <p class="text-xs text-[#A8A29E] leading-relaxed">
+              Dunia Minecraft survival bersama keluarga 24 jam.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Service Bento Grid Section (FEATURED WORK - Cream Band) -->
+  <section id="services" class="py-16 sm:py-24 bg-[#FAF7F0] scroll-mt-20 sm:scroll-mt-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header & Filter Tabs -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-warm-muted mb-2 font-semibold">
-            <span class="w-2 h-2 rounded-sm bg-warm-accent"></span>
-            <span>Katalog Layanan</span>
-          </div>
-          <h2 class="text-2xl sm:text-4xl font-extrabold text-warm-charcoal tracking-tight">
-            Pilihan Layanan untuk Keluarga
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#EAA838] text-[#161513] border border-[#161513] shadow-brutal-sm mb-3">
+            KATALOG LAYANAN
+          </span>
+          <h2 class="font-serif font-black text-3xl sm:text-5xl text-[#161513] tracking-tight text-balance">
+            Pilihan Layanan Keluarga.
           </h2>
-          <p class="text-sm sm:text-base text-warm-muted mt-2 max-w-xl">
+          <p class="text-sm sm:text-base text-[#6B655D] mt-2 max-w-xl text-pretty font-medium">
             Pilih layanan yang ingin digunakan. Klik kartu atau tombol untuk langsung membukanya di peramban Anda.
           </p>
         </div>
 
-        <!-- Category Filter Tabs -->
+        <!-- Category Filter Tabs (Brutalist Pills) -->
         <div>
           <CategoryFilter services={servicesData} />
         </div>
       </div>
 
-      <!-- Bento Grid Cards Container (Ukuran Lebih Besar: 2 Kolom Responsif) -->
+      <!-- Bento Grid Cards Container (2 Columns Responsif) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="services-grid">
         {servicesData.map(service => (
           <ServiceCard service={service} />
@@ -138,25 +206,108 @@ const nextcloud = servicesData.find(s => s.id === 'nextcloud');
     </div>
   </section>
 
-  <!-- Panduan Akses Mudah -->
-  <AccessGuide />
+  <!-- 4. Full-Bleed Terracotta Band (MANIFESTO / "WHAT CLIENTS SAY" VIBE) -->
+  <section class="bg-[#DE5D35] text-[#FAF7F0] border-y-2 border-[#161513] py-16 sm:py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Left: Big Quote & Title -->
+        <div class="lg:col-span-4 space-y-4">
+          <span class="font-serif text-6xl sm:text-7xl font-black text-[#FAF7F0]/40 leading-none">“</span>
+          <h2 class="font-serif font-black text-3xl sm:text-4xl text-[#FAF7F0] tracking-tight leading-tight text-balance">
+            Dirancang dengan Tujuan, Dirawat dengan Hati.
+          </h2>
+          <p class="text-xs sm:text-sm text-[#FAF7F0]/80 leading-relaxed font-medium">
+            Kami percaya teknologi rumah tangga harus melayani keluarga, bukan mengeksploitasi data atau perhatian.
+          </p>
+        </div>
 
-  <!-- About / Privacy Section -->
-  <section id="about" class="py-14 sm:py-20 bg-warm-sand/30 border-t border-warm-border scroll-mt-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
-      <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs bg-warm-sand border border-warm-border text-warm-charcoal font-semibold shadow-subtle">
-        <Sparkles class="w-4 h-4 text-warm-accent" />
-        <span>Khusus untuk Kenyamanan Seluruh Keluarga</span>
+        <!-- Right: 3 Manifesto Pillars -->
+        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+          
+          <div class="p-6 rounded-3xl bg-[#C84F2A] border-2 border-[#161513] shadow-brutal-sm space-y-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-[#FAF7F0]/70">01. PRIVASI</span>
+            <h3 class="font-bold text-base text-[#FAF7F0]">100% Bebas Iklan</h3>
+            <p class="text-xs text-[#FAF7F0]/80 leading-relaxed">
+              Seluruh film dan dokumen dinikmati murni tanpa selingan iklan komersial maupun pelacak algoritma.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-[#C84F2A] border-2 border-[#161513] shadow-brutal-sm space-y-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-[#FAF7F0]/70">02. KENDALI</span>
+            <h3 class="font-bold text-base text-[#FAF7F0]">Data Mandiri</h3>
+            <p class="text-xs text-[#FAF7F0]/80 leading-relaxed">
+              Berkas dan foto liburan keluarga tersimpan pada server mandiri terenkripsi milik sendiri.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-[#C84F2A] border-2 border-[#161513] shadow-brutal-sm space-y-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-[#FAF7F0]/70">03. PRAKTIS</span>
+            <h3 class="font-bold text-base text-[#FAF7F0]">Multi-Perangkat</h3>
+            <p class="text-xs text-[#FAF7F0]/80 leading-relaxed">
+              Dapat dibuka langsung dari browser di HP, tablet, laptop, hingga Smart TV ruang tengah.
+            </p>
+          </div>
+
+        </div>
+
       </div>
 
-      <h2 class="text-2xl sm:text-4xl font-extrabold text-warm-charcoal tracking-tight">
-        Sederhana, Bersih, dan Mandiri
-      </h2>
-
-      <p class="text-sm sm:text-base text-warm-muted leading-relaxed font-normal max-w-2xl mx-auto">
-        Portal ini dirancang tanpa iklan, tanpa pelacak data komersial, dan dapat diakses dengan mudah di berbagai perangkat. Dibuat khusus agar seluruh anggota keluarga dapat menikmati fasilitas digital mandiri dengan aman dan nyaman.
-      </p>
     </div>
   </section>
+
+  <!-- 5. Panduan Akses & Direktori Alamat Web -->
+  <AccessGuide />
+
+  <!-- 6. Full-Bleed Mustard Yellow CTA Band ("HAVE A PROJECT IN MIND?" VIBE) -->
+  <section class="bg-[#EAA838] text-[#161513] border-t-2 border-[#161513] py-16 sm:py-20 relative overflow-hidden">
+    <!-- Decorative Hand / Star Graphic Elements (Matching Reference) -->
+    <div class="absolute -right-8 -bottom-8 w-40 h-40 text-[#DE5D35] opacity-20 pointer-events-none hidden sm:block" aria-hidden="true">
+      <svg class="w-full h-full" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50 0 L60 35 L95 25 L75 55 L100 80 L65 75 L50 100 L35 75 L0 80 L25 55 L5 25 L40 35 Z"/>
+      </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+        
+        <div class="space-y-3 max-w-2xl">
+          <span class="font-mono text-xs font-bold uppercase tracking-widest text-[#161513]">
+            BANTUAN & DUKUNGAN
+          </span>
+          <h2 class="font-serif font-black text-3xl sm:text-5xl text-[#161513] tracking-tight leading-tight text-balance">
+            Ada kendala atau ingin menambah layanan?
+          </h2>
+          <p class="text-sm sm:text-base text-[#161513]/80 leading-relaxed font-medium text-pretty">
+            Portal ini dirawat bersama untuk seluruh anggota keluarga. Silakan hubungi pengelola jika Anda memerlukan akun baru, bantuan kata sandi, atau ingin usul fitur utilitas lainnya.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <a 
+            href={siteConfig.statusPageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-[#161513] text-[#FAF7F0] font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-[#DE5D35] transition-[background-color,transform] shadow-brutal-sm hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
+          >
+            <span>Cek Status Sistem</span>
+            <ArrowUpRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+          </a>
+
+          <a 
+            href="#panduan"
+            class="inline-flex items-center gap-2 px-6 py-4 rounded-full bg-white text-[#161513] border-2 border-[#161513] font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-[#FAF7F0] transition-[background-color,transform] shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
+          >
+            <span>Panduan Akses</span>
+            <ArrowRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>
 
 </Layout>
