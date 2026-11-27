@@ -17,10 +17,10 @@ const {
 ---
 
 <!doctype html>
-<html lang="id">
+<html lang="id" class="scroll-smooth" style="color-scheme: light">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
@@ -35,18 +35,25 @@ const {
     <meta property="og:image" content="/favicon.svg" />
 
     <!-- Theme Color matching Warm Light Background -->
-    <meta name="theme-color" content="#FAF9F6" />
+    <meta name="theme-color" content="#FAF7F0" />
 
     <!-- Preconnect Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
 
-  <body class="min-w-[320px] bg-warm-bg text-warm-charcoal antialiased selection:bg-warm-accent selection:text-warm-bg">
-    
+  <body class="min-w-[320px] bg-warm-bg text-warm-charcoal antialiased selection:bg-warm-accent selection:text-warm-bg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+    <!-- Accessible Skip Link for Keyboard Navigation -->
+    <a 
+      href="#main-content" 
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2.5 focus:bg-warm-accent focus:text-warm-bg focus:font-bold focus:rounded-xl focus:shadow-card focus:outline-none focus:ring-2 focus:ring-warm-accent focus:ring-offset-2 focus:ring-offset-warm-bg transition-transform"
+    >
+      Loncat ke konten utama
+    </a>
+
     <Navbar />
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1" class="focus:outline-none">
       <slot />
     </main>
 
@@ -61,47 +68,96 @@ const {
         initSmartUptimeKuma();
       });
 
-      // 1. Instant Category Filter
+      // 1. Instant Category Filter with URL Sync & Keyboard Support
       function initCategoryFilter() {
-        const filterButtons = document.querySelectorAll('.filter-tab');
-        const cards = document.querySelectorAll('.service-card');
+        const filterButtons = Array.from(document.querySelectorAll('.filter-tab'));
+        const cards = Array.from(document.querySelectorAll('.service-card'));
+        if (filterButtons.length === 0) return;
 
-        filterButtons.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const category = btn.getAttribute('data-filter');
+        function applyFilter(category, updateUrl = true) {
+          // Update active button state and accessibility attributes
+          filterButtons.forEach(btn => {
+            const isMatch = btn.getAttribute('data-filter') === category;
+            btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+            btn.setAttribute('tabindex', isMatch ? '0' : '-1');
 
-            // Update Tab styles
-            filterButtons.forEach(b => {
-              b.classList.remove('bg-warm-accent', 'text-warm-bg', 'shadow-subtle');
-              b.classList.add('bg-warm-sand', 'text-warm-charcoal', 'border', 'border-warm-border');
-              
-              const countEl = b.querySelector('span:last-child');
+            if (isMatch) {
+              btn.classList.add('bg-[#161513]', 'text-[#FAF7F0]', 'shadow-brutal-sm');
+              btn.classList.remove('bg-[#FAF7F0]', 'text-[#161513]');
+              const countEl = btn.querySelector('.tab-count');
               if (countEl) {
-                countEl.className = 'text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-warm-surface text-warm-muted border border-warm-border/60';
+                countEl.className = 'tab-count text-[11px] font-mono tabular-nums px-2 py-0.5 rounded-full border border-[#161513] font-bold bg-[#EAA838] text-[#161513]';
               }
-            });
+            } else {
+              btn.classList.remove('bg-[#161513]', 'text-[#FAF7F0]', 'shadow-brutal-sm');
+              btn.classList.add('bg-[#FAF7F0]', 'text-[#161513]');
+              const countEl = btn.querySelector('.tab-count');
+              if (countEl) {
+                countEl.className = 'tab-count text-[11px] font-mono tabular-nums px-2 py-0.5 rounded-full border border-[#161513] font-bold bg-[#F2ECE1] text-[#161513]';
+              }
+            }
+          });
 
-            btn.classList.add('bg-warm-accent', 'text-warm-bg', 'shadow-subtle');
-            btn.classList.remove('bg-warm-sand', 'text-warm-charcoal', 'border-warm-border');
-            
-            const activeCountEl = btn.querySelector('span:last-child');
-            if (activeCountEl) {
-              activeCountEl.className = 'text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-warm-bg/20 text-warm-bg';
+          // Show or hide corresponding cards
+          cards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            if (category === 'all' || cardCat === category) {
+              card.style.display = 'flex';
+              card.classList.remove('opacity-0', 'scale-95');
+              card.classList.add('opacity-100', 'scale-100');
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // Sync URL search params
+          if (updateUrl && window.history && window.history.replaceState) {
+            const url = new URL(window.location.href);
+            if (category === 'all') {
+              url.searchParams.delete('category');
+            } else {
+              url.searchParams.set('category', category);
+            }
+            window.history.replaceState({}, '', url.toString());
+          }
+        }
+
+        // Attach Click & Keyboard Event Handlers
+        filterButtons.forEach((btn, index) => {
+          btn.addEventListener('click', () => {
+            const category = btn.getAttribute('data-filter') || 'all';
+            applyFilter(category, true);
+          });
+
+          // Arrow Key Navigation between tabs
+          btn.addEventListener('keydown', (e) => {
+            let targetIndex = null;
+            if (e.key === 'ArrowRight') {
+              targetIndex = (index + 1) % filterButtons.length;
+            } else if (e.key === 'ArrowLeft') {
+              targetIndex = (index - 1 + filterButtons.length) % filterButtons.length;
+            } else if (e.key === 'Home') {
+              targetIndex = 0;
+            } else if (e.key === 'End') {
+              targetIndex = filterButtons.length - 1;
             }
 
-            // Filter Cards
-            cards.forEach(card => {
-              const cardCat = card.getAttribute('data-category');
-              if (category === 'all' || cardCat === category) {
-                card.style.display = 'flex';
-                card.classList.remove('opacity-0', 'scale-95');
-                card.classList.add('opacity-100', 'scale-100');
-              } else {
-                card.style.display = 'none';
-              }
-            });
+            if (targetIndex !== null) {
+              e.preventDefault();
+              filterButtons[targetIndex].focus();
+              const category = filterButtons[targetIndex].getAttribute('data-filter') || 'all';
+              applyFilter(category, true);
+            }
           });
         });
+
+        // Initialize state from URL param if present
+        const initialUrl = new URL(window.location.href);
+        const requestedCat = initialUrl.searchParams.get('category');
+        const validCategories = ['all', 'media', 'utility', 'game'];
+        if (requestedCat && validCategories.includes(requestedCat)) {
+          applyFilter(requestedCat, false);
+        }
       }
 
       // 2. Click to Copy with Visual & Toast Feedback
@@ -132,7 +188,7 @@ const {
               const labelEl = btn.querySelector('.copy-label');
               const origText = labelEl ? labelEl.textContent : '';
               if (labelEl) labelEl.textContent = 'Tersalin!';
-              btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+              btn.classList.add('bg-[#EAA838]', 'text-[#161513]');
 
               if (window.showToast) {
                 window.showToast(`Alamat ${serviceName} (${textToCopy}) berhasil disalin!`);
@@ -140,7 +196,7 @@ const {
 
               setTimeout(() => {
                 if (labelEl) labelEl.textContent = origText;
-                btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+                btn.classList.remove('bg-[#EAA838]', 'text-[#161513]');
               }, 2000);
             } catch (err) {
               console.error('Failed to copy text: ', err);
@@ -335,9 +391,14 @@ const {
 
           const heroLastChecked = document.getElementById('hero-last-checked');
           if (heroLastChecked) {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            heroLastChecked.textContent = `Terakhir dicek pukul ${timeStr} WIB · Tiap 60s`;
+            const timeFormatter = new Intl.DateTimeFormat('id-ID', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false
+            });
+            const timeStr = timeFormatter.format(new Date());
+            heroLastChecked.innerHTML = `Terakhir dicek pukul <span class="font-mono tabular-nums font-medium">${timeStr}</span> WIB · Tiap 60&nbsp;dtk`;
           }
         }
 

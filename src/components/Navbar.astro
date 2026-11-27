@@ -1,97 +1,109 @@
 ---
 import { siteConfig } from '../data/services';
-import { Activity, ArrowUpRight } from 'lucide-astro';
+import { ArrowUpRight } from 'lucide-astro';
 ---
 
-<header class="sticky top-0 z-40 w-full backdrop-blur-md bg-warm-bg/90 border-b border-warm-border transition-colors">
+<header class="sticky top-0 z-40 w-full bg-[#FAF7F0]/95 backdrop-blur-md border-b-2 border-[#161513] transition-colors">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 sm:h-20">
+    <div class="flex items-center justify-between h-18 sm:h-20">
       
-      <!-- Brand & Global Status -->
-      <div class="flex items-center gap-4 sm:gap-6">
-        <a href="/" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-warm-accent flex items-center justify-center text-warm-bg font-bold shadow-subtle group-hover:scale-105 transition-transform">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.95 8.41a2 2 0 0 0-.95 1.7v7.82a2 2 0 0 0 .98 1.72l9.93 6.06a2 2 0 0 0 2.06 0l6.15-3.76a2 2 0 0 0 .88-1.7V8.12a2 2 0 0 0-.88-1.72Z"/>
-              <path d="m12 22 9-5.5V11L12 16.5 3 11v5.5l9 5.5Z"/>
-              <path d="m12 16.5V2"/>
+      <!-- Brand & Sunburst Emblem -->
+      <div class="flex items-center gap-3 sm:gap-6">
+        <a 
+          href="/" 
+          class="flex items-center gap-2.5 group rounded-xl p-1 -m-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF7F0]"
+          aria-label="Kubiko Portal Beranda"
+        >
+          <!-- Sunburst Icon (Matching Reference Graphic) -->
+          <span class="w-8 h-8 rounded-full bg-[#DE5D35] text-[#FAF7F0] flex items-center justify-center font-black group-hover:rotate-45 transition-transform duration-300 shadow-brutal-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2l2.4 4.8 5.3-2.1-2.1 5.3 4.8 2.4-4.8 2.4 2.1 5.3-5.3-2.1-2.4 4.8-2.4-4.8-5.3 2.1 2.1-5.3-4.8-2.4 4.8-2.4-2.1-5.3 5.3 2.1z"/>
             </svg>
-          </div>
-          <div class="flex flex-col">
-            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-warm-charcoal flex items-center gap-1.5">
-              kubiko<span class="text-warm-accent">.my.id</span>
-            </span>
-            <span class="text-[11px] text-warm-muted hidden sm:inline-block">Portal Layanan Keluarga</span>
-          </div>
+          </span>
+
+          <span class="font-serif font-black text-2xl sm:text-3xl tracking-tight text-[#161513] flex items-center" translate="no">
+            KUBIKO
+          </span>
+          <span class="hidden lg:inline-block ml-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-[#EAA838] border border-[#161513] text-[#161513]">
+            PORTAL
+          </span>
         </a>
 
-        <!-- Global Status Pill -->
+        <!-- Global Status Pill (Editorial Badge) -->
         <a 
           href={siteConfig.statusPageUrl} 
           target="_blank" 
           rel="noopener noreferrer"
-          class="hidden md:inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-warm-sand border border-warm-border hover:border-warm-border-hover transition-colors text-warm-charcoal"
+          class="hidden md:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#FAF7F0] border-2 border-[#161513] hover:bg-[#F2ECE1] transition-colors text-[#161513] shadow-brutal-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
           id="global-status-badge"
-          title="Lihat kondisi sistem"
+          title="Lihat status sistem real-time (buka di tab baru)"
         >
-          <span class="relative flex h-2 w-2">
+          <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-online opacity-75 status-ping"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-status-online status-dot"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-online status-dot"></span>
           </span>
-          <span class="status-text">Semua Layanan Normal</span>
-          <ArrowUpRight class="w-3 h-3 text-warm-muted" />
+          <span class="status-text font-mono text-[11px] tracking-tight uppercase">Sistem Normal</span>
         </a>
       </div>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center gap-1 sm:gap-2">
+      <!-- Navigation Links (Editorial Minimalist Sans) -->
+      <nav class="hidden md:flex items-center gap-1 sm:gap-4 lg:gap-6" aria-label="Navigasi Utama">
         <a 
           href="#services" 
-          class="px-3.5 py-2 rounded-lg text-sm font-semibold text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+          class="px-2 py-1 text-xs font-bold uppercase tracking-widest text-[#161513] hover:text-[#DE5D35] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#DE5D35] after:transition-[width] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
         >
           Layanan
         </a>
         <a 
+          href="#fitur" 
+          class="px-2 py-1 text-xs font-bold uppercase tracking-widest text-[#161513] hover:text-[#DE5D35] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#DE5D35] after:transition-[width] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
+        >
+          Fitur
+        </a>
+        <a 
           href="#panduan" 
-          class="px-3.5 py-2 rounded-lg text-sm font-semibold text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+          class="px-2 py-1 text-xs font-bold uppercase tracking-widest text-[#161513] hover:text-[#DE5D35] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#DE5D35] after:transition-[width] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
         >
           Panduan
         </a>
         <a 
           href="#subdomain-routes" 
-          class="px-3.5 py-2 rounded-lg text-sm font-semibold text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+          class="px-2 py-1 text-xs font-bold uppercase tracking-widest text-[#161513] hover:text-[#DE5D35] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#DE5D35] after:transition-[width] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
         >
           Alamat Web
         </a>
         <a 
-          href="#about" 
-          class="px-3.5 py-2 rounded-lg text-sm font-semibold text-warm-charcoal hover:bg-warm-sand hover:text-warm-accent transition-colors"
+          href="#tentang" 
+          class="px-2 py-1 text-xs font-bold uppercase tracking-widest text-[#161513] hover:text-[#DE5D35] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#DE5D35] after:transition-[width] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
         >
           Tentang
         </a>
       </nav>
 
-      <!-- Right Action / Mobile Toggle -->
-      <div class="flex items-center gap-2">
+      <!-- Right Action Pill Button (Matching "LET'S WORK TOGETHER ->") -->
+      <div class="flex items-center gap-3">
         <a
           href={siteConfig.statusPageUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-warm-sand text-warm-charcoal border border-warm-border hover:bg-warm-surface hover:border-warm-border-hover transition-all shadow-subtle"
+          class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#EAA838] text-[#161513] border-2 border-[#161513] hover:bg-[#D99625] transition-[background-color,transform] shadow-brutal-sm hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+          title="Periksa halaman status monitor (tab baru)"
         >
-          <Activity class="w-4 h-4 text-warm-accent" />
-          <span class="hidden sm:inline">Cek Status</span>
+          <span>Status Sistem</span>
+          <ArrowUpRight class="w-3.5 h-3.5 stroke-[2.5]" aria-hidden="true" />
         </a>
 
         <!-- Mobile Menu Button -->
         <button 
           id="mobile-menu-btn"
           type="button" 
-          class="md:hidden p-2 rounded-lg text-warm-charcoal hover:bg-warm-sand focus:outline-none cursor-pointer"
-          aria-label="Buka menu"
+          class="md:hidden min-w-[44px] min-h-[44px] p-2.5 rounded-xl bg-[#FAF7F0] border-2 border-[#161513] text-[#161513] hover:bg-[#EAA838] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2 transition-colors cursor-pointer flex items-center justify-center shadow-brutal-sm"
+          aria-label="Buka menu navigasi"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
         >
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg class="w-6 h-6 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
@@ -100,28 +112,29 @@ import { Activity, ArrowUpRight } from 'lucide-astro';
   </div>
 
   <!-- Mobile Dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-warm-border bg-warm-bg px-4 pt-2 pb-4 space-y-1">
-    <div class="py-2 mb-2">
+  <div id="mobile-menu" class="hidden md:hidden border-t-2 border-[#161513] bg-[#FAF7F0] px-4 pt-3 pb-5 space-y-2">
+    <div class="py-2 mb-1">
       <a 
         href={siteConfig.statusPageUrl} 
         target="_blank" 
         rel="noopener noreferrer"
-        class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium bg-warm-sand border border-warm-border text-warm-charcoal"
+        class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#F2ECE1] border-2 border-[#161513] text-[#161513] shadow-brutal-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
       >
         <span class="flex items-center gap-2">
-          <span class="relative flex h-2 w-2">
+          <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-online opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-status-online"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-online"></span>
           </span>
           <span>Status Layanan: Normal</span>
         </span>
-        <ArrowUpRight class="w-3.5 h-3.5 text-warm-muted" />
+        <ArrowUpRight class="w-4 h-4 text-[#161513]" aria-hidden="true" />
       </a>
     </div>
-    <a href="#services" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Layanan Keluarga</a>
-    <a href="#panduan" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Panduan Akses</a>
-    <a href="#subdomain-routes" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Alamat Web</a>
-    <a href="#about" class="block px-3 py-2 rounded-lg text-sm font-medium text-warm-charcoal hover:bg-warm-sand">Tentang</a>
+    <a href="#services" class="block px-4 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider text-[#161513] hover:bg-[#EAA838] transition-colors border border-transparent hover:border-[#161513]">Layanan Keluarga</a>
+    <a href="#fitur" class="block px-4 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider text-[#161513] hover:bg-[#EAA838] transition-colors border border-transparent hover:border-[#161513]">Fitur Utama</a>
+    <a href="#panduan" class="block px-4 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider text-[#161513] hover:bg-[#EAA838] transition-colors border border-transparent hover:border-[#161513]">Panduan Akses</a>
+    <a href="#subdomain-routes" class="block px-4 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider text-[#161513] hover:bg-[#EAA838] transition-colors border border-transparent hover:border-[#161513]">Alamat Web</a>
+    <a href="#tentang" class="block px-4 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider text-[#161513] hover:bg-[#EAA838] transition-colors border border-transparent hover:border-[#161513]">Tentang</a>
   </div>
 </header>
 
@@ -129,13 +142,27 @@ import { Activity, ArrowUpRight } from 'lucide-astro';
   const menuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
 
-  menuBtn?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+  function toggleMenu() {
+    if (!mobileMenu || !menuBtn) return;
+    const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+    menuBtn.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+    mobileMenu.classList.toggle('hidden');
+  }
+
+  menuBtn?.addEventListener('click', toggleMenu);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuBtn?.getAttribute('aria-expanded') === 'true') {
+      menuBtn.setAttribute('aria-expanded', 'false');
+      mobileMenu?.classList.add('hidden');
+      menuBtn.focus();
+    }
   });
 
   mobileMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
+      menuBtn?.setAttribute('aria-expanded', 'false');
+      mobileMenu?.classList.add('hidden');
     });
   });
 </script>
