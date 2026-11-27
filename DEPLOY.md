@@ -60,7 +60,7 @@ Ambil baris `known_hosts` langsung dari VPS (di VPS). Jangan pakai `ssh-keyscan`
 echo "<VPS_HOST> $(cut -d' ' -f1,2 /etc/ssh/ssh_host_ed25519_key.pub)"
 ```
 
-Salin satu baris hasilnya sebagai `<BARIS_KNOWN_HOSTS>`. Lalu simpan keempat secrets dengan GitHub CLI (PowerShell). Akses *write* sebagai collaborator sudah cukup lewat CLI; menu **Settings** di web hanya untuk pemilik repo. Ganti `<VPS_HOST>` dengan IP atau hostname VPS (pakai IP kalau domain lewat proxy Cloudflare).
+Salin satu baris hasilnya sebagai `<BARIS_KNOWN_HOSTS>`. Lalu simpan keempat secrets dengan GitHub CLI (PowerShell). Akses *write* sebagai collaborator sudah cukup, lewat CLI atau **Settings → Secrets and variables** di web. Ganti `<VPS_HOST>` dengan IP atau hostname VPS (pakai IP kalau domain lewat proxy Cloudflare).
 
 ```powershell
 $repo = "muhaliakbar14-cyber/kubiko"
