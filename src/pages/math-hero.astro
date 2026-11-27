@@ -1,0 +1,202 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../data/services';
+import { ArrowLeft, ArrowDown, ArrowUpRight, Maximize, Star, Zap, Target, Flame } from 'lucide-astro';
+
+// Full class strings so Tailwind can pick them up
+const games = [
+  {
+    number: 1,
+    level: 'Pemula',
+    description: 'Tantangan aritmatika dasar untuk pemanasan otak. Cocok untuk semua umur dan level kemampuan.',
+    Icon: Star,
+    header: 'bg-[#EAA838] text-[#161513]',
+  },
+  {
+    number: 2,
+    level: 'Mudah',
+    description: 'Level kedua dengan soal yang lebih menantang. Tingkatkan kecepatan dan ketepatan berhitungmu!',
+    Icon: Zap,
+    header: 'bg-[#F2ECE1] text-[#161513]',
+  },
+  {
+    number: 3,
+    level: 'Menengah',
+    description: 'Tantangan semakin seru dengan variasi operasi dan waktu yang lebih ketat. Siap uji kemampuanmu?',
+    Icon: Target,
+    header: 'bg-[#DE5D35] text-[#161513]',
+  },
+  {
+    number: 4,
+    level: 'Sulit',
+    description: 'Level puncak dengan mode layar penuh landscape. Pengalaman bermain paling intens dan seru!',
+    Icon: Flame,
+    header: 'bg-[#161513] text-[#FAF7F0]',
+    landscape: true,
+  },
+];
+
+// Decorative hero tiles
+const tiles = [
+  { symbol: '+', style: 'bg-[#EAA838] text-[#161513] -rotate-6' },
+  { symbol: '−', style: 'bg-white text-[#161513] rotate-3 translate-y-4' },
+  { symbol: '×', style: 'bg-[#161513] text-[#FAF7F0] rotate-2' },
+  { symbol: '÷', style: 'bg-[#DE5D35] text-[#161513] -rotate-3 translate-y-4' },
+];
+---
+
+<Layout title={`Math Hero — Game Matematika | ${siteConfig.siteName}`} description="Koleksi game matematika seru untuk seluruh keluarga. 4 level tantangan yang bisa langsung dimainkan di browser HP, tablet, atau laptop.">
+
+  <!-- Hero -->
+  <section class="relative pt-8 pb-16 sm:pb-24 border-b-2 border-[#161513] bg-[#FAF7F0] tech-grid-pattern overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <a
+        href="/"
+        class="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#161513] border-2 border-[#161513] shadow-brutal-sm hover:bg-[#F2ECE1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+      >
+        <ArrowLeft class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+        <span>Kembali ke Portal</span>
+      </a>
+
+      <div class="mt-10 sm:mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#DE5D35] text-[#161513] border-2 border-[#161513] shadow-brutal-sm">
+            <span class="w-2 h-2 rounded-full bg-[#161513]" aria-hidden="true"></span>
+            <span>Game Edukasi Keluarga</span>
+          </div>
+
+          <h1 class="font-serif font-black text-6xl sm:text-7xl lg:text-8xl tracking-tight text-[#161513] leading-[0.92]" translate="no">
+            MATH<br />HERO<span class="text-[#DE5D35]">.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-[#6B655D] leading-relaxed max-w-xl font-medium text-pretty">
+            Koleksi game matematika yang menantang dan menyenangkan untuk seluruh anggota keluarga.
+            Pilih level sesuai kemampuan, langsung mainkan di browser — tanpa perlu pasang aplikasi!
+          </p>
+
+          <div class="pt-2">
+            <a
+              href="#level"
+              class="inline-flex items-center gap-2.5 px-7 py-3.5 sm:py-4 rounded-full bg-[#EAA838] text-[#161513] border-2 border-[#161513] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-brutal hover:bg-[#D99625] hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5 transition-[background-color,transform,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+            >
+              <span>Pilih Level</span>
+              <ArrowDown class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+            </a>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs sm:text-sm text-[#161513] font-bold font-mono">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-status-online" aria-hidden="true"></span>
+              <span>Gratis & Bebas Iklan</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#EAA838]" aria-hidden="true"></span>
+              <span>Optimal di HP</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#DE5D35]" aria-hidden="true"></span>
+              <span>Bisa di Laptop & Tablet</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:grid lg:col-span-5 grid-cols-2 gap-6 w-full max-w-sm justify-self-center" aria-hidden="true">
+          {tiles.map((tile) => (
+            <div class={`aspect-square rounded-3xl border-2 border-[#161513] shadow-brutal-lg flex items-center justify-center font-sans font-extrabold text-9xl leading-none select-none ${tile.style}`}>
+              {tile.symbol}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Levels -->
+  <section id="level" class="py-16 sm:py-24 bg-[#FAF7F0] scroll-mt-20 sm:scroll-mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="mb-12">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#EAA838] text-[#161513] border border-[#161513] shadow-brutal-sm mb-3">
+          Pilih Level
+        </span>
+        <h2 class="font-serif font-black text-3xl sm:text-5xl text-[#161513] tracking-tight text-balance">
+          4 Tantangan Menanti.
+        </h2>
+        <p class="text-sm sm:text-base text-[#6B655D] mt-2 max-w-xl text-pretty font-medium">
+          Mulai dari level pemula hingga sulit. Klik kartu untuk langsung bermain di tab baru!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {games.map(({ number, level, description, Icon, header, landscape }) => (
+          <a
+            href={`https://hilmifuadi.github.io/math-hero/mh${number}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col rounded-3xl bg-white border-2 border-[#161513] shadow-brutal hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5 transition-[box-shadow,transform] duration-200 overflow-hidden focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#161513] focus-visible:ring-offset-2"
+          >
+            <div class={`px-6 sm:px-8 py-5 border-b-2 border-[#161513] flex items-center justify-between gap-4 ${header}`}>
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-white border-2 border-[#161513] flex items-center justify-center text-[#161513] shadow-brutal-sm group-hover:rotate-6 transition-transform">
+                  <Icon class="w-6 h-6" aria-hidden="true" />
+                </div>
+                <div>
+                  <div class="font-mono text-xs font-bold uppercase tracking-wider">{level}</div>
+                  <!-- Difficulty meter -->
+                  <div class="mt-1.5 flex gap-1" aria-hidden="true">
+                    {[1, 2, 3, 4].map((step) => (
+                      <span class={`w-5 h-2 rounded-full border border-current ${step <= number ? 'bg-current' : ''}`}></span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <span class="font-serif font-black text-6xl leading-none tabular-nums" aria-hidden="true">{number}</span>
+            </div>
+
+            <div class="flex-1 p-6 sm:p-8">
+              <h3 class="font-serif font-black text-2xl sm:text-3xl tracking-tight text-[#161513] group-hover:text-[#DE5D35] transition-colors" translate="no">
+                Math Hero {number}
+              </h3>
+              <p class="mt-3 text-sm text-[#6B655D] leading-relaxed text-pretty">
+                {description}
+              </p>
+              <div class="mt-5 pt-4 border-t border-[#E2D9CC] flex flex-wrap items-center gap-2 font-mono text-[11px] font-medium text-[#161513]">
+                <span class="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-[#161513]">
+                  <span class="text-[#DE5D35] mr-1" aria-hidden="true">✓</span>{landscape ? 'Mode Landscape' : 'Mode Portrait'}
+                </span>
+                {landscape && (
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#EAA838] border border-[#161513]">
+                    <Maximize class="w-3 h-3" aria-hidden="true" />
+                    Layar Penuh
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div class="px-6 sm:px-8 py-4 bg-[#FAF7F0] border-t-2 border-[#161513] flex items-center justify-between gap-3">
+              <span class="font-mono text-[11px] font-bold uppercase text-[#6B655D]">
+                100% Bebas Iklan
+              </span>
+              <span class="min-h-[44px] shrink-0 whitespace-nowrap inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#161513] text-[#FAF7F0] group-hover:bg-[#DE5D35] transition-colors border-2 border-[#161513] shadow-brutal-sm">
+                Main Sekarang
+                <ArrowUpRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Credits -->
+      <div class="mt-14 p-6 sm:p-8 rounded-3xl bg-[#161513] text-[#D6D3D1] border-2 border-[#161513] shadow-brutal-yellow text-center">
+        <p class="text-sm leading-relaxed text-pretty">
+          <strong class="text-[#FAF7F0]" translate="no">Math Hero</strong> dikembangkan oleh
+          <a href="https://github.com/hilmifuadi" target="_blank" rel="noopener noreferrer" class="text-[#EAA838] font-bold underline underline-offset-4 hover:text-[#FAF7F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EAA838]" translate="no">hilmifuadi</a>
+          dan diintegrasikan ke portal <strong class="text-[#FAF7F0]" translate="no">Kubiko</strong> untuk kenyamanan seluruh keluarga.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

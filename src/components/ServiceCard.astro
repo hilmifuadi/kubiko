@@ -1,5 +1,5 @@
 ---
-import { Film, FileText, Gamepad2, Dices, HardDrive, Activity, Copy, ArrowUpRight, Sparkles, Ticket } from 'lucide-astro';
+import { Film, FileText, Gamepad2, Dices, HardDrive, Activity, Copy, ArrowUpRight, Sparkles, Ticket, Calculator } from 'lucide-astro';
 import type { ServiceItem } from '../types/service';
 
 interface Props {
@@ -14,6 +14,9 @@ const categoryAccent = {
   utility: 'bg-[#EAA838] text-[#161513]',
   game: 'bg-[#161513] text-[#FAF7F0]',
 }[service.category] || 'bg-[#161513] text-[#FAF7F0]';
+
+// Internal routes stay in the same tab
+const isInternal = service.url.startsWith('/');
 ---
 
 <div 
@@ -35,7 +38,8 @@ const categoryAccent = {
           {service.icon === 'Gamepad2' && <Gamepad2 class="w-6 h-6 text-[#DE5D35]" aria-hidden="true" />}
           {service.icon === 'Dices' && <Dices class="w-6 h-6 text-[#EAA838]" aria-hidden="true" />}
           {service.icon === 'HardDrive' && <HardDrive class="w-6 h-6 text-[#EAA838]" aria-hidden="true" />}
-          {!['Film', 'Ticket', 'FileText', 'Gamepad2', 'Dices', 'HardDrive'].includes(service.icon) && <Activity class="w-6 h-6" aria-hidden="true" />}
+          {service.icon === 'Calculator' && <Calculator class="w-6 h-6 text-[#EAA838]" aria-hidden="true" />}
+          {!['Film', 'Ticket', 'FileText', 'Gamepad2', 'Dices', 'HardDrive', 'Calculator'].includes(service.icon) && <Activity class="w-6 h-6" aria-hidden="true" />}
         </div>
 
         <div>
@@ -127,12 +131,12 @@ const categoryAccent = {
           100% Bebas Iklan
         </span>
 
-        <a 
+        <a
           href={service.url}
-          target="_blank"
-          rel="noopener noreferrer"
+          target={isInternal ? undefined : '_blank'}
+          rel={isInternal ? undefined : 'noopener noreferrer'}
           class="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#161513] text-[#FAF7F0] hover:bg-[#DE5D35] transition-[background-color,transform] border-2 border-[#161513] shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#161513]"
-          title={`Buka ${service.name} di tab baru`}
+          title={isInternal ? `Buka ${service.name}` : `Buka ${service.name} di tab baru`}
         >
           <span>{service.isUpcoming ? 'Lihat Info' : 'Buka Layanan'}</span>
           <ArrowUpRight class="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
