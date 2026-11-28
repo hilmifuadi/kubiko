@@ -55,7 +55,7 @@ kubiko/
 
 ## 🚀 Memulai Proyek Secara Lokal
 
-Pastikan Anda telah memasang **Node.js** (versi 20 atau 22 LTS direkomendasikan):
+Pastikan Anda telah memasang **Node.js** (minimal versi 22.23.4):
 
 1. **Pasang Dependensi:**
    ```bash
