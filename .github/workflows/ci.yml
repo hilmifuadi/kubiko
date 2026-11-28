@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# One run per ref at a time, so two deploys never overlap
+concurrency:
+  group: ci-${{ github.ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      # Deploy runs only on push to main; setup guide in DEPLOY.md
+      - name: Deploy ke VPS
+        if: github.event_name == 'push'
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          TARGET: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
+        run: |
+          install -d -m 700 ~/.ssh
+          install -m 600 /dev/null ~/.ssh/id_ed25519
+          # tr: secrets pasted or piped from Windows may carry CR characters
+          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" | tr -d '\r' > ~/.ssh/known_hosts
+          # "./" is the folder the VPS key is locked to (rrsync)
+          rsync -rlpz --delete-after --delay-updates dist/ "$TARGET:./"
+
+      - name: Cek halaman live
+        if: github.event_name == 'push'
+        run: curl -fsSL https://kubiko.my.id/math-hero | grep '4 Tantangan Menanti' > /dev/null
